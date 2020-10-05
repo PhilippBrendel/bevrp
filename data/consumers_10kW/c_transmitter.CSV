@@ -1,0 +1,7 @@
+ID,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
+Telekom VST 3,1,1,1,transmitter.CSV,50,10,49.436242,7.758138
+Telekom VST 4,2,2,2,transmitter.CSV,50,10,49.436242,7.758138
+Telekom VST 6,3,3,3,transmitter.CSV,50,10,49.436242,7.758138
+Telekom VST 8,1,1,1,transmitter.CSV,50,10,49.436242,7.758138
+Telekom VST 9,1,1,1,transmitter.CSV,50,10,49.436242,7.758138
+Telekom VST 10,2,2,2,transmitter.CSV,50,10,49.445629,7.788002

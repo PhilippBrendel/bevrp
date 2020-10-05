@@ -1,0 +1,10 @@
+ID,name,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
+Erzeuger 1,Muell HKW Pirmasens,16000,0,16000,producers.CSV,200,10,49.1932,7.619246
+Erzeuger 2,Kohle HKW,20000,0,20000,producers.CSV,200,10,49.434852,7.761034
+Erzeuger 3,Biomasse HKW,3200,0,3200,producers.CSV,200,10,49.475171,7.8199
+Erzeuger 4,BHKW,384,0,384,producers.CSV,200,10,49.441395,7.7566
+Erzeuger 5,BHKW,50,0,50,producers.CSV,200,10,49.43656,7.758293
+Erzeuger 6,Gasturbine,190,0,190,producers.CSV,200,10,49.44,7.702
+Erzeuger 7,NEA Pfalzcenter,434,0,434,producers.CSV,200,10,49.443,7.817
+Erzeuger 8,Notstromaggregat Kuerten,330,0,330,producers.CSV,200,10,49.433,7.749
+Erzeuger 9,WE_0160_50kWel_2016_01,50,0,50,producers.CSV,200,10,49.42703,7.762326

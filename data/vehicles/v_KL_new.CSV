@@ -1,0 +1,91 @@
+ID,cap[kWh],cap_0[kWh],node_0,consumption[kWh/km],power_cdc[kW],speed[km/h],name,costs
+car 88,95,95,0,0.211,200,250,Tesla Model X,236
+car 73,95,95,0,0.184,200,250,Tesla Model S,219
+car 80,72.5,72.5,0,0.161,200,250,Tesla Model 3,152
+car 10,64,64,0,0.173,77,167,Kia e-Niro 64,104
+car 16,39.2,39.2,0,0.167,50,155,Kia e-Niro 39,94
+car 24,56,56,0,0.172,100,157,Nissan Leaf e+,102
+car 30,36,36,0,0.164,46,144,Nissan Leaf,80
+car 37,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 1,37.9,37.9,0,0.161,49,150,BMW i3,104
+car 20,58,58,0,0.173,46,150,Opel Ampera-e,115
+car 2,37.9,37.9,0,0.161,49,150,BMW i3,104
+car 3,37.9,37.9,0,0.161,49,150,BMW i3,104
+car 4,37.9,37.9,0,0.161,49,150,BMW i3,104
+car 5,37.9,37.9,0,0.161,49,150,BMW i3,104
+car 6,37.9,37.9,0,0.161,49,150,BMW i3,104
+car 7,37.9,37.9,0,0.161,49,150,BMW i3,104
+car 8,37.9,37.9,0,0.161,49,150,BMW i3,104
+car 9,37.9,37.9,0,0.161,49,150,BMW i3,104
+car 11,64,64,0,0.173,77,167,Kia e-Niro 64,104
+car 12,64,64,0,0.173,77,167,Kia e-Niro 64,104
+car 13,64,64,0,0.173,77,167,Kia e-Niro 64,104
+car 14,64,64,0,0.173,77,167,Kia e-Niro 64,104
+car 15,64,64,0,0.173,77,167,Kia e-Niro 64,104
+car 17,39.2,39.2,0,0.167,50,155,Kia e-Niro 39,94
+car 18,39.2,39.2,0,0.167,50,155,Kia e-Niro 39,94
+car 19,39.2,39.2,0,0.167,50,155,Kia e-Niro 39,94
+car 21,58,58,0,0.173,46,150,Opel Ampera-e,115
+car 22,58,58,0,0.173,46,150,Opel Ampera-e,115
+car 23,58,58,0,0.173,46,150,Opel Ampera-e,115
+car 25,56,56,0,0.172,100,157,Nissan Leaf e+,102
+car 26,56,56,0,0.172,100,157,Nissan Leaf e+,102
+car 27,56,56,0,0.172,100,157,Nissan Leaf e+,102
+car 28,56,56,0,0.172,100,157,Nissan Leaf e+,102
+car 29,56,56,0,0.172,100,157,Nissan Leaf e+,102
+car 31,36,36,0,0.164,46,144,Nissan Leaf,80
+car 32,36,36,0,0.164,46,144,Nissan Leaf,80
+car 33,36,36,0,0.164,46,144,Nissan Leaf,80
+car 34,36,36,0,0.164,46,144,Nissan Leaf,80
+car 35,36,36,0,0.164,46,144,Nissan Leaf,80
+car 36,36,36,0,0.164,46,144,Nissan Leaf,80
+car 38,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 39,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 40,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 41,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 42,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 43,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 44,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 45,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 46,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 47,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 48,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 49,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 50,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 51,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 52,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 53,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 54,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 55,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 56,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 57,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 58,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 59,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 60,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 61,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 62,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 63,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 64,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 65,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 66,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 67,41,41,0,0.161,45,135,Renault Zoe ZE40,80
+car 68,95,95,0,0.184,200,250,Tesla Model S,219
+car 69,95,95,0,0.184,200,250,Tesla Model S,219
+car 70,95,95,0,0.184,200,250,Tesla Model S,219
+car 71,95,95,0,0.184,200,250,Tesla Model S,219
+car 72,95,95,0,0.184,200,250,Tesla Model S,219
+car 74,95,95,0,0.184,200,250,Tesla Model S,219
+car 75,95,95,0,0.184,200,250,Tesla Model S,219
+car 76,95,95,0,0.184,200,250,Tesla Model S,219
+car 77,95,95,0,0.184,200,250,Tesla Model S,219
+car 78,95,95,0,0.184,200,250,Tesla Model S,219
+car 79,95,95,0,0.184,200,250,Tesla Model S,219
+car 81,72.5,72.5,0,0.161,200,250,Tesla Model 3,152
+car 82,72.5,72.5,0,0.161,200,250,Tesla Model 3,152
+car 83,72.5,72.5,0,0.161,200,250,Tesla Model 3,152
+car 84,72.5,72.5,0,0.161,200,250,Tesla Model 3,152
+car 85,72.5,72.5,0,0.161,200,250,Tesla Model 3,152
+car 86,95,95,0,0.211,200,250,Tesla Model X,236
+car 87,95,95,0,0.211,200,250,Tesla Model X,236
+car 89,95,95,0,0.211,200,250,Tesla Model X,236
+car 90,95,95,0,0.211,200,250,Tesla Model X,236

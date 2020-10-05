@@ -1,0 +1,24 @@
+ID,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
+Krankenhaus 1,2455.42,2455.42,2455.42,profile_G3.CSV,50,10,49.44137,7.756277
+Krankenhaus 2,89.55,89.55,89.55,profile_G3.CSV,50,10,49.441804,7.772308
+Krankenhaus 3,89.55,89.55,89.55,profile_G3.CSV,50,10,49.438601,7.753911
+Aerztehaus 1,13.70,13.70,13.70,profile_G1.CSV,50,10,49.442565,7.759207
+Dialyse 1,13.70,13.70,13.70,profile_G1.CSV,50,10,49.422983,7.740197
+Dialyse 2,13.70,13.70,13.70,profile_G1.CSV,50,10,49.444028,7.771672
+Feuerwehr 1,8.36,8.36,8.36,profile_G3.CSV,50,10,49.439019,7.742563
+Polizei 1,8.02,8.02,8.02,profile_G3.CSV,50,10,49.447667,7.700427
+Polizei 2,39.80,39.80,39.80,profile_G3.CSV,50,10,49.437226,7.771272
+Polizei 3,8.02,8.02,8.02,profile_G3.CSV,50,10,49.446,7.775268
+Polizei 4,8.02,8.02,8.02,profile_G3.CSV,50,10,49.436797,7.7698931
+Amtsgericht,9.14,9.14,9.14,profile_G1.CSV,50,10,49.437083,7.769528
+Abfallentsorgung 1,21.77,21.77,21.77,profile_G1.CSV,50,10,49.442157,7.810838
+Abfallentsorgung 2,21.77,21.77,21.77,profile_G1.CSV,50,10,49.436994,7.75771
+Abfallentsorgung 3,21.77,21.77,21.77,profile_G1.CSV,50,10,49.475138,7.8201
+Stadtverwaltung,10.63,10.63,10.63,profile_G1.CSV,50,10,49.446586,7.767529
+Rathaus,10.63,10.63,10.63,profile_G1.CSV,50,10,49.447557,7.768065
+Rundfunk 1,13.70,13.70,13.70,profile_G1.CSV,50,10,49.451644,7.768351
+Rundfunk 2,9.13,9.13,9.13,profile_G1.CSV,50,10,49.444066,7.766715
+Rundfunk 3,6.85,6.85,6.85,profile_G1.CSV,50,10,49.444464,7.769008
+Wasserversorgung 1,21.77,21.77,21.77,profile_G3.CSV,50,10,49.44346,7.774822
+Wasserversorgung 2,21.77,21.77,21.77,profile_G3.CSV,50,10,49.456786,7.743529
+Wasserversorgung 3,21.77,21.77,21.77,profile_G1.CSV,50,10,49.435316,7.761007
