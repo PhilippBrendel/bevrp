@@ -1,0 +1,71 @@
+####################
+# initial settings #
+####################
+t_0: '10:30'                    # initial clock time
+T: 6.0                         # [h]
+delta_t: 1.0                    # [h]
+c_init: 1.0                     # initial soc of nodes 
+p_init: 0.1                     # initial soc of producers
+vehicle_init: 0.1               # initial soc of vehicles 
+
+
+##################
+# Data locations #
+##################
+vehicle_dir: 'data/vehicles'
+depot_dir: 'data/depots'
+consumer_dir: 'data/consumers_10kW'
+producer_dir: 'data/producers_10kW'
+other_dir: 'data/others'
+
+
+#####################
+# Data restrictions #
+#####################
+v_max: 10
+c_max: 6
+p_max: 2
+o_max: 0
+d_max: 1
+lat: [49.41, 49.50]     # min and max vals
+lon: [7.68, 7.86]
+
+
+##################
+# Model settings #
+##################
+objective: 1
+constr_j: True          # (1j) valid inequality
+min_vehicles: True      # toggle obj and constraints connected to z
+limit_vehicles: True    # (1l) limit charging vehicles at locations
+visualize: True         # visualize solution
+
+######################
+# Heuristic settings #
+######################
+h_init_time_limit: 120
+h_time_limit: 60
+h_init: quick           # [quick, greedy]
+
+
+###################
+# Gurobi settings #
+###################
+TimeLimit: 3600
+threads: 0  
+# multiple threads for parallel work
+# can be restricted in order to save RAM
+method: -1
+# method used to solve root relaxation (only root!)
+# -1: default 1: dual-simplex 2: barrier 
+MIPFocus: 0
+# 0: default, balance between both
+# 1: focus on finding feasible solutions 
+# 2: more attention on proving optimality
+# 3: if best bound is barely moving 
+MIPGap: 0.0001    
+# default: 0.0001
+CutPasses: -1
+# default: -1
+write_lp: False
+LogToConsole: True
