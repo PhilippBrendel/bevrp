@@ -132,7 +132,7 @@ const API_KEY = 'ENTER YOUR API';
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+TODO
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
@@ -161,7 +161,7 @@ Contributions are what make the open source community such an amazing place to b
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+TODO. See `LICENSE` for more information.
 
 
 
@@ -185,16 +185,16 @@ Project Link: [https://github.com/PhilippBrendel/bevrp](https://github.com/Phili
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=flat-square
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=flat-square
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=flat-square
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=flat-square
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/philippbrendel/bevrp.svg?style=flat-square
+[contributors-url]: https://github.com/philippbrendel/bevrp/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/philippbrendel/bevrp.svg?style=flat-square
+[forks-url]: https://github.com/philippbrendel/bevrp/network/members
+[stars-shield]: https://img.shields.io/github/stars/philippbrendel/bevrp.svg?style=flat-square
+[stars-url]: https://github.com/philippbrendel/bevrp/stargazers
+[issues-shield]: https://img.shields.io/github/issues/philippbrendel/bevrp.svg?style=flat-square
+[issues-url]: https://github.com/philippbrendel/bevrp/issues
+[license-shield]: https://img.shields.io/github/license/philippbrendel/bevrp.svg?style=flat-square
+[license-url]: https://github.com/philippbrendel/bevrp/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+[linkedin-url]: https://www.linkedin.com/in/philipp-brendel-9059171a6/
+[product-screenshot]: images/smart_krit.jpg
