@@ -14,8 +14,8 @@ vehicle_init: 0.1               # initial soc of vehicles
 ##################
 vehicle_dir: 'data/vehicles'
 depot_dir: 'data/depots'
-consumer_dir: 'data/consumers_10kW'
-producer_dir: 'data/producers_10kW'
+consumer_dir: 'data/consumers_5kW'
+producer_dir: 'data/producers_5kW'
 other_dir: 'data/others'
 
 
@@ -23,8 +23,8 @@ other_dir: 'data/others'
 # Data restrictions #
 #####################
 v_max: 10
-c_max: 6
-p_max: 2
+c_max: 1
+p_max: 1
 o_max: 0
 d_max: 1
 lat: [49.41, 49.50]     # min and max vals

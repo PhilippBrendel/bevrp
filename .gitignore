@@ -1,0 +1,8 @@
+# Ignore init-files
+*/__init__.py
+# Ignore pycache files,
+*.pyc
+.vscode/
+*/.idea/
+/.idea/
+/output/

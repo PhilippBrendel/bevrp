@@ -1,0 +1,10 @@
+name: bevrp
+channels:
+  - http://conda.anaconda.org/gurobi
+dependencies:
+  - python=3.7   
+  - gurobi
+  - numpy
+  - pyyaml
+  - matplotlib
+  - pandas
