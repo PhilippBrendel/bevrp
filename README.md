@@ -77,13 +77,13 @@ This project provides code to solve the bidirectional routing problem.
 The direct implementation as well as a greedy heuristic Greedy-2.
 
 Includes:
-* [smart_krit.py](https://github.com/PhilippBrendel/bevrp/blob/main/smart_krit.py): solve BEVRP directly using Gurobi
+* [smart_krit.py](https://github.com/PhilippBrendel/bevrp/blob/main/smart_krit.py): direct solver of BEVRP
 * [greedy.py](https://github.com/PhilippBrendel/bevrp/blob/main/greedy.py): implementation of Greedy-2 heuristic
-* [visualizers.py](https://github.com/PhilippBrendel/bevrp/blob/main/visualizers.py): tools to visualize solutions :smile:
-* [utils.py](https://github.com/PhilippBrendel/bevrp/blob/main/utils.py): helper function in various stages of the above
-* [pypeline.py](https://github.com/PhilippBrendel/bevrp/blob/main/pypeline.py): useful automization script to solve many instances 
-* [config.yaml](https://github.com/PhilippBrendel/bevrp/blob/main/config.yaml): exemplary config-file
-* exemplary data containing energy consumers, producers and vehicles
+* [visualizers.py](https://github.com/PhilippBrendel/bevrp/blob/main/visualizers.py): visualization tools
+* [utils.py](https://github.com/PhilippBrendel/bevrp/blob/main/utils.py): helper functions
+* [pypeline.py](https://github.com/PhilippBrendel/bevrp/blob/main/pypeline.py): automatization script for sequential solving of multiple instances 
+* [config.yaml](https://github.com/PhilippBrendel/bevrp/blob/main/config.yaml): examplary config-file
+* examplary data containing energy consumers, producers and vehicles
 
 
 <!--
@@ -132,9 +132,24 @@ const API_KEY = 'ENTER YOUR API';
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-TODO
+### Configuration
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+Configure YAML-file for your problem. 
+Default file used is *bevrp/config.yaml* if not specified otherwise via cmd-line option (see below).
+
+### Start Optimization
+
+Direct solver:
+```py
+python smart_krit.py -c my_sk_config.yaml
+```
+
+Greedy-2 heuristic:
+```py
+python greedy2.py -c my_greedy_config.yaml
+```
+
+_For more examples, please refer to the [TODO](https://example.com)_
 
 
 

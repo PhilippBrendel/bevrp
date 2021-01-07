@@ -1,0 +1,9 @@
+ID,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
+mobile radio 10,27.5,27.5,8.4,mobile_radio.CSV,50,5,49.441658,7.751749
+mobile radio 11,27.5,27.5,8.4,mobile_radio.CSV,50,5,49.439112,7.764789
+mobile radio 12,27.5,27.5,7.2,mobile_radio.CSV,50,5,49.436842,7.758865
+mobile radio 18,27.5,27.5,6,mobile_radio.CSV,50,5,49.43508,7.75397
+mobile radio 33,27.5,27.5,4.8,mobile_radio.CSV,50,5,49.43694,7.76819
+mobile radio 36,27.5,27.5,4.8,mobile_radio.CSV,50,5,49.440542,7.754968
+mobile radio 44,27.5,27.5,3.6,mobile_radio.CSV,50,5,49.435867,7.757007
+mobile radio 45,27.5,27.5,3.6,mobile_radio.CSV,50,5,49.43478,7.76095

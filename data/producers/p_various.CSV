@@ -1,0 +1,4 @@
+ID,name,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
+Erzeuger 2,Kohle HKW,20000,0,20000,producers.CSV,200,10,49.434852,7.761034
+Erzeuger 4,BHKW,384,0,384,producers.CSV,200,10,49.441395,7.7566
+Erzeuger 5,BHKW,50,0,50,producers.CSV,200,10,49.43656,7.758293

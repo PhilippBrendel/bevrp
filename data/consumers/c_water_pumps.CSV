@@ -1,0 +1,4 @@
+ID,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
+sewage pump 18,10,10,10,water_pumps.CSV,50,10,49.4408252,7.7562416
+sewage pump 19,10,10,10,water_pumps.CSV,50,10,49.4366524,7.763264
+water pump 11,5,5,5,water_pumps.CSV,50,10,49.44031,7.76713
