@@ -74,8 +74,8 @@ class visuals:
                         'C': 'r', 
                         'D': 'k',
                         'O': 'darkgrey'}
-        self.circle_rad = {'D': 0.0006, 'P': 0.0006, 
-                           'C': 0.0006, 'O': 0.0003}
+        self.circle_rad = {'D': 0.0002, 'P': 0.0002, 
+                           'C': 0.0002, 'O': 0.0001}
         self.box_factor = 1.5
         self.show_vehicles = {'D': True, 'P': True, 
                               'C': True, 'O': True}

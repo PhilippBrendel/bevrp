@@ -88,10 +88,10 @@ def get_pd_frame(n_type, folder, n_max, lat, lon):
                       (frame['lat'] >= lat[0]) &
                       (frame['lon'] <= lon[1]) & 
                       (frame['lon'] >= lon[0])]
-        if list(frame.columns) == cols or n_type in ['D',]:
+        if set(cols).issubset(set(frame.columns)):
             pd_frame = pd_frame.append(frame)
         else:
-            print('Wrong columns in file {}'.format(files[i]))
+            print('Missing columns in file {}'.format(files[i]))
     pd_frame.insert(1,'type', n_type)
 
     return pd_frame[:n_max]
@@ -154,18 +154,19 @@ def get_node_data(yaml_dict):
     node_data = pd.concat([depot_data, consumer_data, 
                            producer_data], ignore_index=True)
 
-    if np.min(node_data['lat'].values) > lat[0]:
-        lat[0] = np.min(node_data['lat'].values)
-    if np.max(node_data['lat'].values) < lat[1]:
-        lat[1] = np.max(node_data['lat'].values)
-    if np.min(node_data['lon'].values) > lon[0]:
-        lon[0] = np.min(node_data['lon'].values)
-    if np.max(node_data['lon'].values) < lon[1]:
-        lon[1] = np.max(node_data['lon'].values) 
+    if False:
+        if np.min(node_data['lat'].values) > lat[0]:
+            lat[0] = np.min(node_data['lat'].values)
+        if np.max(node_data['lat'].values) < lat[1]:
+            lat[1] = np.max(node_data['lat'].values)
+        if np.min(node_data['lon'].values) > lon[0]:
+            lon[0] = np.min(node_data['lon'].values)
+        if np.max(node_data['lon'].values) < lon[1]:
+            lon[1] = np.max(node_data['lon'].values) 
 
     other_data = get_pd_frame('O', yaml_dict['other_dir'], 
                               yaml_dict['o_max'], lat, lon)
-
+    
     node_data = pd.concat([node_data, other_data], 
                           ignore_index=True)
 

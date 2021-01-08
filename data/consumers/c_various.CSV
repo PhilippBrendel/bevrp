@@ -1,7 +1,0 @@
-ID,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
-Krankenhaus 1,2455.42,2455.42,2455.42,profile_G3.CSV,50,10,49.44137,7.756277
-Aerztehaus 1,13.70,13.70,13.70,profile_G1.CSV,50,10,49.442565,7.759207
-Polizei 2,39.80,39.80,39.80,profile_G3.CSV,50,10,49.437226,7.771272
-Polizei 4,8.02,8.02,8.02,profile_G3.CSV,50,10,49.436797,7.7698931
-Amtsgericht,9.14,9.14,9.14,profile_G1.CSV,50,10,49.437083,7.769528
-Wasserversorgung 3,21.77,21.77,21.77,profile_G1.CSV,50,10,49.435316,7.761007

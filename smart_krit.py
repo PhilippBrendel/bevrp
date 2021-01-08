@@ -116,7 +116,7 @@ class my_sk():
                        len(self.consumers), len(self.producers))
             log_str += '\n{} others\n{} time intervals'.format(
                         len(self.others), self.t_steps-1)
-            log_str += '\n objective: {}'.format(self.obj)
+            log_str += '\nobjective: {}'.format(self.obj)
             print(log_str)
 
         # vehicles

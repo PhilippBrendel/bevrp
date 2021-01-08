@@ -2,10 +2,10 @@
 # initial settings #
 ####################
 t_0: '10:30'                    # initial clock time
-T: 6.0                         # [h]
-delta_t: 1.0                    # [h]
-c_init: 1.0                     # initial soc of nodes 
-p_init: 0.1                     # initial soc of producers
+T: 2.0                         # [h]
+delta_t: 0.05                   # [h]
+c_init: 0.25                     # initial soc of nodes 
+p_init: 0.25                     # initial soc of producers
 vehicle_init: 0.1               # initial soc of vehicles 
 
 
@@ -14,21 +14,21 @@ vehicle_init: 0.1               # initial soc of vehicles
 ##################
 vehicle_dir: 'data/vehicles'
 depot_dir: 'data/depots'
-consumer_dir: 'data/consumers_5kW'
-producer_dir: 'data/producers_5kW'
+consumer_dir: 'data/consumers'
+producer_dir: 'data/producers'
 other_dir: 'data/others'
 
 
 #####################
 # Data restrictions #
 #####################
-v_max: 10
-c_max: 1
-p_max: 1
+v_max: 40
+c_max: 11
+p_max: 7
 o_max: 0
 d_max: 1
-lat: [49.41, 49.50]     # min and max vals
-lon: [7.68, 7.86]
+lat: [49.00, 49.90]     # min and max vals
+lon: [7.50, 7.90]
 
 
 ##################
