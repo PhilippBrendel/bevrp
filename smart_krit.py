@@ -57,6 +57,8 @@ class my_sk():
         self.node_data = get_node_data(yaml_dict)
         self.init_nodes()
         self.vehicle_data = get_vehicle_data(yaml_dict)
+        self.vehicles = range(self.vehicle_data.shape[0])
+
 
         self.mod = Model("smart_krit")
         
@@ -108,16 +110,22 @@ class my_sk():
         - sets with index lists for variable creation
         - dictionaries for constraint-formulation
         '''
-        self.vehicles = range(self.vehicle_data.shape[0])
+        log_str = 'Solving problem for: \n{} vehicles'.format(
+                    len(self.vehicles))
+        log_str += '\n{} consumers\n{} producers'.format(
+                    len(self.consumers), len(self.producers))
+        log_str += '\n{} depots\n{} other nodes'.format(
+                    len(self.depots), len(self.others))
+        log_str += '\n{} timesteps with delta = {} h'.format(
+                    self.t_steps-1, self.delta_t)
+        log_str += '\nobjective: {}'.format(self.obj)
+        log_str += '\nC init: {}\nP init: {}'.format(self.c_init, self.p_init)
+        log_str += '\nV init: {}\n'.format(self.vehicle_init)
+
         if self.LogToConsole:
-            log_str = 'Solving problem for: \n{} vehicles'.format(
-                       len(self.vehicles))
-            log_str += '\n{} consumers\n{} producers'.format(
-                       len(self.consumers), len(self.producers))
-            log_str += '\n{} others\n{} time intervals'.format(
-                        len(self.others), self.t_steps-1)
-            log_str += '\nobjective: {}'.format(self.obj)
             print(log_str)
+        with open(self.LogFile, 'a') as logfile:
+            logfile.write(log_str) 
 
         # vehicles
         self.S_v_max = self.vehicle_data['cap[kWh]'].values 
