@@ -1,0 +1,100 @@
+Solving problem for: 
+10 vehicles
+11 consumers
+5 producers
+1 depots
+0 other nodes
+80 timesteps with delta = 0.05 h
+objective: 0
+C init: 0.25
+P init: 0.25
+V init: 0.1
+
+Gurobi 9.1.1 (linux64) logging started Tue Mar  2 11:05:11 2021
+
+Changed value of parameter LogFile to output/2021_03_02-1105_log.txt
+   Prev:   Default: 
+Parameter LogToConsole unchanged
+   Value: 1  Min: 0  Max: 1  Default: 1
+Changed value of parameter threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Parameter method unchanged
+   Value: -1  Min: -1  Max: 5  Default: -1
+Parameter MIPFocus unchanged
+   Value: 0  Min: 0  Max: 3  Default: 0
+Parameter MIPGap unchanged
+   Value: 0.0001  Min: 0.0  Max: inf  Default: 0.0001
+Parameter CutPasses unchanged
+   Value: -1  Min: -1  Max: 2000000000  Default: -1
+Changed value of parameter TimeLimit to 7200.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.1 build v9.1.1rc0 (linux64)
+Thread count: 16 physical cores, 16 logical processors, using up to 1 threads
+Optimize a model with 30828 rows, 240735 columns and 1193484 nonzeros
+Model fingerprint: 0x7962733a
+Variable types: 14965 continuous, 225770 integer (225770 binary)
+Coefficient statistics:
+  Matrix range     [1e-02, 8e+01]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [2e-01, 2e+01]
+Presolve removed 931 rows and 492 columns
+Presolve time: 1.85s
+Presolved: 29897 rows, 240243 columns, 1171865 nonzeros
+Variable types: 14503 continuous, 225740 integer (225740 binary)
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   11624    7.9224325e-05   1.734340e+03   0.000000e+00      5s
+   16269    9.9226813e-05   4.689385e+02   0.000000e+00     10s
+   19331    1.1713396e-04   9.218889e+01   0.000000e+00     15s
+   20661    0.0000000e+00   0.000000e+00   0.000000e+00     18s
+
+Root relaxation: objective 0.000000e+00, 20661 iterations, 15.51 seconds
+Total elapsed time = 56.79s
+Total elapsed time = 72.44s
+Total elapsed time = 82.05s
+Total elapsed time = 98.29s
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0  497          -    0.00000      -     -  109s
+     0     0    0.00000    0  657          -    0.00000      -     -  137s
+     0     0    0.00000    0  608          -    0.00000      -     -  138s
+     0     0    0.00000    0  616          -    0.00000      -     -  231s
+     0     0    0.00000    0  593          -    0.00000      -     -  233s
+     0     0    0.00000    0  461          -    0.00000      -     -  331s
+     0     0    0.00000    0  494          -    0.00000      -     -  333s
+     0     0    0.00000    0  468          -    0.00000      -     -  416s
+     0     0    0.00000    0  448          -    0.00000      -     -  417s
+     0     0    0.00000    0  574          -    0.00000      -     -  468s
+     0     0    0.00000    0  574          -    0.00000      -     -  510s
+     0     2    0.00000    0  461          -    0.00000      -     -  733s
+     1     3    0.00000    1  607          -    0.00000      - 66116  742s
+     2     4    0.00000    1  468          -    0.00000      - 33866  751s
+     7     9    0.00000    5  805          -    0.00000      -  9963  755s
+    17    19    0.00000   13  805          -    0.00000      -  4205  760s
+    35    37    0.00000   26  820          -    0.00000      -  2198  765s
+    36    38    0.00000   26  853          -    0.00000      -  2177  771s
+    65    67    0.00000   46  642          -    0.00000      -  1335  775s
+   112   114    0.00000   81  481          -    0.00000      -   919  780s
+   169   171    0.00000  123  245          -    0.00000      -   694  785s
+   248   250    0.00000  192  171          -    0.00000      -   514  790s
+   336   338    0.00000  277   83          -    0.00000      -   398  795s
+   428   430    0.00000  366   93          -    0.00000      -   320  800s
+*  486     2             424       0.0000000    0.00000  0.00%   285  803s
+
+Cutting planes:
+  Implied bound: 2
+  MIR: 55
+  Flow cover: 109
+
+Explored 487 nodes (670986 simplex iterations) in 803.30 seconds
+Thread count was 1 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%

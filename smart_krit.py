@@ -145,6 +145,7 @@ class my_sk():
         sets['vnmt'] = [(v, n, m, t) for v in self.vehicles 
                         for t in self.times for n in self.nodes 
                         for m in self.nodes]
+        print(self.vehicles, self.nodes)
         sets['w'] = [(v, n, m, t) for v in self.vehicles 
                      for t in self.times for n in self.nodes 
                      for m in self.nodes 
@@ -441,7 +442,7 @@ class my_sk():
                 out_file.write('\n')
 
         model_dict = {'times': self.times,
-                        't_0': self.t_0,                
+                       't_0': self.t_0,                
                        'delta_t': self.delta_t,
                        't_steps': self.t_steps,
                        'nodes': self.nodes,

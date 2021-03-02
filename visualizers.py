@@ -63,15 +63,27 @@ class visuals:
         self.xlim = [x_min, x_max]
         self.ylim = [y_min, y_max]
 
-        self.time_str = []
+        self.x_tick_str = []
+        self.title_str = []
         t_0 = datetime.strptime(self.t_0, '%H:%M')
         for t in range(self.t_steps):
-            now = t_0 + timedelta(hours=t*self.delta_t)       
-            self.time_str.append(now.strftime('%H:%M'))      
+            now = t_0 + timedelta(hours=t*self.delta_t)
+            self.title_str.append(now.strftime('%H:%M'))
+            interval = int(self.t_steps / 10)
+            if t % interval == 0:
+                self.x_tick_str.append(now.strftime('%H:%M'))
+            else:
+                self.x_tick_str.append('')
        
-        # charge/discharge/
+
+        # setting for time_series_plot
+        self.show_fictive_soc = True
+        self.show_producers = True
+        self.label_vehicles = False
+        self.cummulative_E_nt = False
+        # Settings for interactive_plot
         self.n_color = {'P': 'b', 
-                        'C': 'r', 
+                        'C': 'g', 
                         'D': 'k',
                         'O': 'darkgrey'}
         self.circle_rad = {'D': 0.0002, 'P': 0.0002, 
@@ -85,7 +97,7 @@ class visuals:
                             'C': False, 'O': False}
 
         self.time_series_plots()
-        self.interactive_plot()
+        #self.interactive_plot()
 
     def update_annot_v(self,v, n_type):
         '''
@@ -206,7 +218,7 @@ class visuals:
         '''
         # initialize plot with fixed elements
         self.fig, self.ax = plt.subplots()
-        #img = plt.imread("osm_kl.jpg")
+        #img = plt.imread("images/osm_KL.png")
         #self.ax.imshow(img, extent=[7.6516, 7.8935, 
         #                            49.4042, 49.5075])
         self.fig.canvas.mpl_connect("motion_notify_event", 
@@ -256,7 +268,7 @@ class visuals:
                     bbox=dict(boxstyle="round", fc="w"),
                     arrowprops=dict(arrowstyle="->"))
         self.annot.set_visible(False)
-        self.ax.set_title('{}'.format(self.time_str[t]))
+        self.ax.set_title('{}'.format(self.title_str[t]), fontsize=15)
 
         # dicts to save circle objects, 
         # nodes and coordinates of vehicles
@@ -353,7 +365,12 @@ class visuals:
         Plot three different time series plots
         for producer, consumer and vehicles.
         '''
-        fig, ax = plt.subplots(3)
+        if self.show_producers:
+            v_ax = 2
+            fig, ax = plt.subplots(3)
+        else:
+            v_ax = 1
+            fig, ax = plt.subplots(2)
 
         p_color = self.n_color['P']
         p_color_2 = 'grey'
@@ -368,23 +385,32 @@ class visuals:
         for n in self.nodes:
             soc = np.zeros(self.t_steps)                 
             if self.n_type[n] == 'C':
+                soc_fictive = np.zeros(self.t_steps)
+                soc_fictive[0] = self.s_nt[n,0]
                 for t in range(self.t_steps):
+                    if t > 0 and self.show_fictive_soc:
+                        soc_fictive[t] = (soc_fictive[t-1] - 
+                                            self.E_nt[n,t-1])
                     soc[t] = self.s_nt[n,t] #/ self.S_n_max[n]
                     cons[t] += self.E_nt[n,t] 
                 if len(S_c_max) == 0:
                     ax[0].plot(soc,'{}-'.format(self.n_color['C']), 
-                               label='consumers: s_nt')
+                               label='mit SmartKrit')
+                    if self.show_fictive_soc:
+                        ax[0].plot(soc_fictive, '{}--'.format(
+                                'r'),
+                                label=('ohne SmartKrit')) 
                 else:
                     ax[0].plot(soc,'{}-'.format(self.n_color['C']))
-                S_c_max.append(max(np.max(soc),self.S_n_max[n]))
-                #S_c_max.append(np.max(soc))
-                #ax[0].plot(soc, '{}-'.format(self.n_color['C']), 
-                #           label='{}'.format(self.n_names[n]))    
-            elif self.n_type[n] == 'P':
+                    if self.show_fictive_soc:
+                        ax[0].plot(soc_fictive, '{}--'.format(
+                            'r'))
+                S_c_max.append(max(np.max(soc),self.S_n_max[n]))    
+            elif self.n_type[n] == 'P' and self.show_producers:
                 soc_fictive = np.zeros(self.t_steps)
                 soc_fictive[0] = self.s_nt[n,0]
                 for t in range(self.t_steps):
-                    if t > 0:
+                    if t > 0 and self.show_fictive_soc:
                         soc_fictive[t] = (soc_fictive[t-1] + 
                                           self.E_nt[n,t-1])
                     soc[t] = self.s_nt[n,t] #/ self.S_n_max[n]
@@ -392,19 +418,23 @@ class visuals:
                 if len(S_p_max) == 0:
                     ax[1].plot(soc, '{}-'.format(
                                         self.n_color['P']), 
-                                        label='producers: s_nt') 
-                    ax[1].plot(soc_fictive, '{}--'.format(
-                           self.n_color['P']),
-                           label=('s_nt without' + 
-                                 '\ncharging vehicles'))  
+                                        label='producers: s_nt')
+                    if self.show_fictive_soc:
+                        ax[1].plot(soc_fictive, '{}--'.format(
+                                self.n_color['P']),
+                                label=('s_nt without' + 
+                                        '\ncharging vehicles'))  
                 else:
                     ax[1].plot(soc,'{}-'.format(self.n_color['P']))
-                    ax[1].plot(soc_fictive, '{}--'.format(
-                           self.n_color['P']))
-                S_p_max.append(max(np.max(soc),self.S_n_max[n]))
-                #S_p_max.append(np.max(soc))
-                #ax[1].plot(soc, '{}-'.format(self.n_color['P']), 
-                #           label='{}'.format(self.n_names[n]))
+                    if self.show_fictive_soc:
+                        ax[1].plot(soc_fictive, '{}--'.format(
+                            self.n_color['P']))
+                if self.show_fictive_soc:
+                    soc_p_max = max(np.max(soc), np.max(soc_fictive))
+                else:
+                    soc_p_max = np.max(soc)
+                S_p_max.append(max(soc_p_max,self.S_n_max[n]))
+
                 
         
 
@@ -419,62 +449,70 @@ class visuals:
         y_start_p = prod[:-1]
         y_stop_p = prod[1:]
 
-        ax_01 = ax[0].twinx()
-        ax_11 = ax[1].twinx()
-
-        ax_01.hlines(cons, x_start, x_stop, c_color_2, 
-                    'dashed', 
-                    label='Total consumption\n(cumul. per h)')
-        ax_01.vlines(x_array,y_start_c,y_stop_c,c_color_2, 
-                    'dashed')
-        ax_11.hlines(prod,x_start,x_stop,p_color_2, 
-                    'dashed', 
-                    label='Total production\n(cumul. per h)')
-        ax_11.vlines(x_array,y_start_p,y_stop_p,p_color_2, 
-                    'dashed')
-
+        
+        if self.cummulative_E_nt:
+            ax_01 = ax[0].twinx()
+            ax_01.hlines(cons, x_start, x_stop, c_color_2, 
+                        'dashed', 
+                        label='Total consumption\n(cumul. per h)')
+            ax_01.vlines(x_array,y_start_c,y_stop_c,c_color_2, 
+                        'dashed')
+            if self.show_producers:
+                ax_11 = ax[1].twinx()
+                ax_11.hlines(prod,x_start,x_stop,p_color_2, 
+                            'dashed', 
+                            label='Total production\n(cumul. per h)')
+                ax_11.vlines(x_array,y_start_p,y_stop_p,p_color_2, 
+                            'dashed')
 
         # Plot 1: consumers
         ax[0].spines['left'].set_color(c_color)
         ax[0].yaxis.label.set_color(c_color)
         ax[0].tick_params(axis='y', colors=c_color)
         ax[0].set_xticks(np.arange(0, self.t_steps, step=1))
-        ax[0].set_xticklabels(self.time_str[::1])
-        #ax[0].set_title('consumer')
-        ax[0].set_ylim([-0.1*max(S_c_max),1.1*max(S_c_max)])
+        ax[0].set_xticklabels(self.x_tick_str[::1])
+        ax[0].set_title('Energieversorgung Konsumenten', fontsize=25)
+        ax[0].set_ylim([-1.5*max(S_c_max),1.1*max(S_c_max)])
         ax[0].set_ylabel('(kWh)')
         leg_0 = ax[0].legend(loc='upper left')
         for text in leg_0.get_texts():
-            text.set_color(c_color)
-        ax_01.spines['right'].set_color(c_color_2)
-        ax_01.yaxis.label.set_color(c_color_2)
-        ax_01.tick_params(axis='y', colors=c_color_2)
-        ax_01.set_ylim([-0.1*np.max(cons),1.1*np.max(cons)])
-        ax_01.set_ylabel('(kWh)')
-        leg_01 = ax_01.legend(loc='upper right')
-        for text in leg_01.get_texts():
-            text.set_color(c_color_2)
+            text.set_color('k')
+        ax[0].hlines(0, -1, self.t_steps+1, 'k', 
+                    'dashed',)
+        if self.cummulative_E_nt:
+            ax_01.spines['right'].set_color(c_color_2)
+            ax_01.yaxis.label.set_color(c_color_2)
+            ax_01.tick_params(axis='y', colors=c_color_2)
+            ax_01.set_ylim([-0.1*np.max(cons),1.1*np.max(cons)])
+            ax_01.set_ylabel('(kWh)')
+            leg_01 = ax_01.legend(loc='upper right')
+            for text in leg_01.get_texts():
+                text.set_color(c_color_2)
 
+        
         # Plot 2: producers
-        #ax[1].set_title('producer')
-        ax[1].set_xticks(np.arange(0, self.t_steps))
-        ax[1].set_xticklabels(self.time_str)
-        ax[1].spines['left'].set_color(p_color)
-        ax[1].yaxis.label.set_color(p_color)
-        ax[1].tick_params(axis='y', colors=p_color)
-        ax[1].set_ylim([-0.1*max(S_p_max),1.1*max(S_p_max)])
-        ax[1].set_ylabel('(kWh)')
-        leg_1 = ax[1].legend(loc='upper left')
-        for text in leg_1.get_texts():
-            text.set_color(p_color)
-        ax_11.spines['right'].set_color(p_color_2)
-        ax_11.yaxis.label.set_color(p_color_2)
-        ax_11.tick_params(axis='y', colors=p_color_2)
-        ax_11.set_ylim([-0.1*np.max(prod),1.1*np.max(prod)])
-        ax_11.set_ylabel('(kWh)')
-        leg_11 = ax_11.legend(loc='upper right')
-        for text in leg_11.get_texts():
-            text.set_color(p_color_2)
+        if self.show_producers:
+            #ax[1].set_title('producer')
+            ax[1].set_xticks(np.arange(0, self.t_steps))
+            ax[1].set_xticklabels(self.x_tick_str)
+            ax[1].spines['left'].set_color(p_color)
+            ax[1].yaxis.label.set_color(p_color)
+            ax[1].tick_params(axis='y', colors=p_color)
+            ax[1].set_ylim([-0.1*max(S_p_max),1.1*max(S_p_max)])
+            ax[1].set_ylabel('(kWh)')
+            leg_1 = ax[1].legend(loc='upper left')
+            for text in leg_1.get_texts():
+                text.set_color(p_color)
+            if self.cummulative_E_nt:
+                ax_11.spines['right'].set_color(p_color_2)
+                ax_11.yaxis.label.set_color(p_color_2)
+                ax_11.tick_params(axis='y', colors=p_color_2)
+                ax_11.set_ylim([-0.1*np.max(prod),1.1*np.max(prod)])
+                ax_11.set_ylabel('(kWh)')
+                leg_11 = ax_11.legend(loc='upper right')
+                for text in leg_11.get_texts():
+                    text.set_color(p_color_2)
+
 
 
         # Plot 3: vehicles
@@ -483,23 +521,29 @@ class visuals:
             array = np.zeros(self.t_steps)
             for t in range(self.t_steps):
                 array[t] = self.s_vt[v,t] / self.S_v_max[v]
-            if len(max_soc) == 0:
-                ax[2].plot(array,'k--', label='vehicles')
+            if self.label_vehicles:
+                ax[v_ax].plot(array, '--', label=self.v_names[v])
             else:
-                ax[2].plot(array,'k--')
+                if len(max_soc) == 0:
+                    ax[v_ax].plot(array,'g-', label='Ladezustand')
+                else:
+                    ax[v_ax].plot(array,'g-')
             max_soc.append(np.max(array))
 
         y_max = max(max_soc)
-        ax[2].set_xticks(np.arange(0, self.t_steps))
-        ax[2].set_xticklabels(self.time_str)
-        #ax[2].set_title('vehicle SOC')
-        ax[2].set_ylim([-0.1*y_max,1.1*y_max])
-        ax[2].set_ylabel('SOC')
-        ax[2].yaxis.set_major_formatter(
+        ax[v_ax].set_xticks(np.arange(0, self.t_steps))
+        ax[v_ax].set_xticklabels(self.x_tick_str)
+        ax[v_ax].set_title('Fahrzeuge für Energietransport', fontsize=25)
+        ax[v_ax].set_ylim([-0.3*y_max,1.1*y_max])
+        #ax[v_ax].set_ylabel('SOC')
+        ax[v_ax].yaxis.set_major_formatter(
                     mtick.PercentFormatter(1.0))
 
-        ax[2].legend(loc='lower left')
-        plt.draw()        
+        ax[v_ax].legend(loc='upper left')
+        ax[v_ax].hlines(0, -1, self.t_steps+1, 'k', 
+                    'dashed',)
+        plt.draw()
+        plt.show()      
 
 
 if __name__ == "__main__":
@@ -510,6 +554,30 @@ if __name__ == "__main__":
                         help=('name / time string of files' +
                               ' to be visualized'))
     args = parser.parse_args()
+    '''
+    base = os.path.abspath(args.name)
+    txt_path = base + '.txt'
+    while not os.path.exists(txt_path):
+        print(f'Warning: {txt_path} does not exist',)
+        if os.path.isdir(base):
+            print('\nSubfolders:')
+            subfolders = os.walk(base)[0][1]
+            print(subfolders)
+            exit()
+            for item in os.walk(base):
+                print(item)
+                print(os.path.basename(item[0]))
+            print('\nTextfiles:')
+            for item in glob.glob('*.txt'):
+                print(item)
+            x = input('\nChoose subdirectory or file_name:')
+        else:
+            exit(f'{base} is not valid')
+        base = os.path.join(base, x)
+        txt_path = base + '.txt'
+    exit()
+    '''
+
     txt_path = args.name + '.txt'
     p_path = args.name + '.p'
     if os.path.exists(txt_path):

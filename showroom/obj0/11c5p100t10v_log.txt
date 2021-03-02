@@ -1,0 +1,98 @@
+Solving problem for: 
+10 vehicles
+11 consumers
+5 producers
+1 depots
+0 other nodes
+100 timesteps with delta = 0.05 h
+objective: 0
+C init: 0.25
+P init: 0.25
+V init: 0.1
+
+Gurobi 9.1.1 (linux64) logging started Tue Mar  2 12:26:24 2021
+
+Changed value of parameter LogFile to output/2021_03_02-1226_log.txt
+   Prev:   Default: 
+Parameter LogToConsole unchanged
+   Value: 1  Min: 0  Max: 1  Default: 1
+Changed value of parameter threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Parameter method unchanged
+   Value: -1  Min: -1  Max: 5  Default: -1
+Parameter MIPFocus unchanged
+   Value: 0  Min: 0  Max: 3  Default: 0
+Parameter MIPGap unchanged
+   Value: 0.0001  Min: 0.0  Max: inf  Default: 0.0001
+Parameter CutPasses unchanged
+   Value: -1  Min: -1  Max: 2000000000  Default: -1
+Changed value of parameter TimeLimit to 7200.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.1 build v9.1.1rc0 (linux64)
+Thread count: 16 physical cores, 16 logical processors, using up to 1 threads
+Optimize a model with 38668 rows, 302355 columns and 1499224 nonzeros
+Model fingerprint: 0x8a0ac280
+Variable types: 18785 continuous, 283570 integer (283570 binary)
+Coefficient statistics:
+  Matrix range     [1e-02, 1e+02]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [2e-01, 2e+01]
+Presolve removed 1151 rows and 592 columns
+Presolve time: 2.33s
+Presolved: 37517 rows, 301763 columns, 1472105 nonzeros
+Variable types: 18223 continuous, 283540 integer (283540 binary)
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+   11874    8.5188356e-05   1.793587e+03   0.000000e+00      5s
+   18085    1.1722891e-04   1.516629e+03   0.000000e+00     10s
+   21588    1.3350994e-04   6.474872e+02   0.000000e+00     15s
+   25113    1.6545836e-04   7.184360e+02   0.000000e+00     20s
+   27858    1.7967874e-04   1.770517e+02   0.000000e+00     25s
+   29383    1.8435267e-04   7.662652e+01   0.000000e+00     30s
+   30758    1.8549116e-04   3.518052e-01   0.000000e+00     35s
+   30809    0.0000000e+00   0.000000e+00   0.000000e+00     35s
+
+Root relaxation: objective 0.000000e+00, 30809 iterations, 31.78 seconds
+Total elapsed time = 96.45s
+Total elapsed time = 112.69s
+Total elapsed time = 129.23s
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0  851          -    0.00000      -     -  144s
+     0     0    0.00000    0  914          -    0.00000      -     -  177s
+     0     0    0.00000    0  925          -    0.00000      -     -  179s
+     0     0    0.00000    0  646          -    0.00000      -     -  353s
+     0     0    0.00000    0  626          -    0.00000      -     -  354s
+     0     0    0.00000    0  603          -    0.00000      -     -  465s
+     0     0    0.00000    0  634          -    0.00000      -     -  469s
+     0     0    0.00000    0  559          -    0.00000      -     -  596s
+     0     0    0.00000    0  653          -    0.00000      -     -  601s
+     0     0    0.00000    0  453          -    0.00000      -     -  745s
+     0     0    0.00000    0  484          -    0.00000      -     -  746s
+     0     0    0.00000    0  529          -    0.00000      -     -  817s
+     0     0    0.00000    0  518          -    0.00000      -     -  819s
+     0     0    0.00000    0  518          -    0.00000      -     -  906s
+     0     0    0.00000    0  518          -    0.00000      -     -  907s
+     0     0    0.00000    0  518          -    0.00000      -     -  990s
+     0     0    0.00000    0  518          -    0.00000      -     - 1071s
+H    0     0                       0.0000000    0.00000  0.00%     - 1237s
+     0     0    0.00000    0  518    0.00000    0.00000  0.00%     - 1237s
+
+Cutting planes:
+  Gomory: 1
+  MIR: 81
+  Flow cover: 180
+  Relax-and-lift: 5
+
+Explored 1 nodes (808833 simplex iterations) in 1237.82 seconds
+Thread count was 1 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
