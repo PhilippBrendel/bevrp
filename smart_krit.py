@@ -12,7 +12,7 @@ class my_sk():
         # create output folder and read config
         if not os.path.exists('output'):
             os.makedirs('output')
-        self.time_str = datetime.now().strftime("%Y_%m_%d-%H%M")
+        self.time_str = datetime.now().strftime("%m_%d-%H_%M_%S")
         with open(config) as config_file:
             yaml_dict = yaml.load(config_file, 
                                   Loader=yaml.FullLoader)
@@ -45,8 +45,6 @@ class my_sk():
         self.write_lp = yaml_dict['write_lp']
         self.LogToConsole = yaml_dict['LogToConsole']
         self.TimeLimit = yaml_dict['TimeLimit']
-        self.LogFile = os.path.join('output', 
-                                    self.time_str + '_log.txt')    
 
         # heuristic settings
         self.h_init_time_limit = yaml_dict['h_init_time_limit']
@@ -59,6 +57,17 @@ class my_sk():
         self.vehicle_data = get_vehicle_data(yaml_dict)
         self.vehicles = range(self.vehicle_data.shape[0])
 
+        self.instance_str = '{}c{}p{}t{}v'.format(
+            len(self.consumers),
+            len(self.producers),
+            self.t_steps-1,
+            len(self.vehicles)
+        )
+        if os.path.exists(os.path.join('output', 
+                                       self.instance_str + '_log.txt')):
+            self.instance_str += ('_' + self.time_str)
+        self.LogFile = os.path.join('output', 
+                                    self.instance_str + '_log.txt')
 
         self.mod = Model("smart_krit")
         
@@ -145,7 +154,6 @@ class my_sk():
         sets['vnmt'] = [(v, n, m, t) for v in self.vehicles 
                         for t in self.times for n in self.nodes 
                         for m in self.nodes]
-        print(self.vehicles, self.nodes)
         sets['w'] = [(v, n, m, t) for v in self.vehicles 
                      for t in self.times for n in self.nodes 
                      for m in self.nodes 
@@ -433,7 +441,7 @@ class my_sk():
             exit()
 
         # save, plot, etc.
-        filepath = "output/" + self.time_str + ".txt"
+        filepath = os.path.join('output', self.instance_str + '.txt')
 
         varlist = mod.getVars()
         with open(filepath, 'w') as out_file:
@@ -460,7 +468,7 @@ class my_sk():
                        'P_vn': self.P_vn,
                        'E_nt': self.E_nt,
                         }
-        pickle_path = 'output/' + self.time_str + '.p'
+        pickle_path = os.path.join('output', self.instance_str + '.p')
         with open(pickle_path, 'wb') as p_path:
             pickle.dump(model_dict, p_path)
 
