@@ -55,11 +55,13 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
-  * [Built With](#built-with)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
+  * [Configuration](#configuration)
+  * [Optimization](#optimization)
+  * [Visualization](#visualization)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -76,10 +78,12 @@
 This project provides code to solve the bidirectional routing problem.
 The direct implementation as well as a greedy heuristic Greedy-2.
 
-Includes:
+### Included
+
 * [smart_krit.py](https://github.com/PhilippBrendel/bevrp/blob/main/smart_krit.py): direct solver of BEVRP
 * [greedy.py](https://github.com/PhilippBrendel/bevrp/blob/main/greedy.py): implementation of Greedy-2 heuristic
 * [visualizers.py](https://github.com/PhilippBrendel/bevrp/blob/main/visualizers.py): visualization tools
+* [gui.py](https://github.com/PhilippBrendel/bevrp/blob/main/gui.py): Simple GUI for visualization functionalities 
 * [utils.py](https://github.com/PhilippBrendel/bevrp/blob/main/utils.py): various helper functions
 * [pypeline.py](https://github.com/PhilippBrendel/bevrp/blob/main/pypeline.py): automatization script for sequential solving of multiple instances via many config-files 
 * [config.yaml](https://github.com/PhilippBrendel/bevrp/blob/main/config.yaml): examplary config-file
@@ -125,7 +129,7 @@ grbgetkey xxxxxxxx-xxxx...
 Configure YAML-file for your problem. 
 Default file used is *bevrp/config.yaml* if not specified otherwise via cmd-line option (see below).
 
-### Start Optimizing
+### Optimization
 
 Direct solver:
 ```sh
@@ -140,14 +144,17 @@ python greedy2.py -c my_greedy_config.yaml
 _For more examples, please refer to the [TODO](https://example.com)_
 
 
-### Visualize your Results
+### Visualization
 
 The included visualization tools are executed by specifying the path to the desired solution files - both the .txt and .p need to exist at the same location:
 ```
 python visualizers.py -n /path/to/my/results/name_of_the_instance
 ```
 
-There is also a simple GUI provided 
+There is also a simple GUI provided that is called via:
+```sh
+python gui.py
+```
 
 
 <!-- ROADMAP -->
