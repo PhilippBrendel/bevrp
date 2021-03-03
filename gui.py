@@ -3,6 +3,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import PySimpleGUI as sg
 import matplotlib
 import os
+from visualizers import visuals
+import pickle
 
 fig = matplotlib.figure.Figure(figsize=(5, 4), dpi=100)
 t = np.arange(0, 3, .01)
@@ -10,30 +12,37 @@ fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
 
 matplotlib.use("TkAgg")
 
-def draw_figure(canvas, figure):
-    figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
+def update_canvas(canvas, filename):
+    
+    with open(filename,'rb') as pickle_file:
+        model_dict = pickle.load(pickle_file)
+        
+    txt_path = os.path.splitext(filename)[0] + '.txt'
+    my_vis = visuals(model_dict, txt_path)
+    fig = my_vis.time_series_plots()
+
+    figure_canvas_agg = FigureCanvasTkAgg(fig, canvas)
     figure_canvas_agg.draw()
     figure_canvas_agg.get_tk_widget().pack(side="top", fill="both", expand=1)
+    
     return figure_canvas_agg
 
+def delete_figure_agg(figure_agg):
+    figure_agg.get_tk_widget().forget()
 
-file_list_column = [
-    [
-        sg.Text("Showroom"),
-        sg.In(size=(25, 1), enable_events=True, key="-FOLDER-"),
-        sg.FolderBrowse(),
-    ],
-    [
-        sg.Listbox(
-            values=[], enable_events=True, size=(40, 20), key="-FILE LIST-"
-        )
-    ],
-]
+# LAYOUT
+file_list_column = [[sg.Text("Showroom"), 
+                     sg.In(size=(25, 1), enable_events=True, key="-FOLDER-"),
+                     sg.FolderBrowse(),],
+                    [sg.Listbox(values=[], 
+                                enable_events=True,
+                                size=(40, 20),
+                                key="-FILE LIST-")],
+                    ]
 
-canvas_column = [
-    [sg.Text('Canvas')],
-    [sg.Canvas(key="-CANVAS-")]
-]
+canvas_column = [[sg.Text('Canvas', justification='center')],
+                 [sg.Canvas(key="-CANVAS-")],
+                 [sg.Button("PREVIOUS"), sg.Button("NEXT")]]
 
 layout = [
     [sg.Text("My GUI")],
@@ -41,12 +50,12 @@ layout = [
      sg.VSeperator(),
      sg.Column(canvas_column),
     ],
-    [sg.Button("OK")],
+    [sg.Button("EXIT")],
 ]
 
-# Create the form and show it without the plot
+# Create window with layout
 window = sg.Window(
-    "Matplotlib Single Graph",
+    "My GUI",
     layout,
     location=(0, 0),
     finalize=True,
@@ -54,38 +63,37 @@ window = sg.Window(
     font="Helvetica 18",
 )
 
-# Add the plot to the window
-draw_figure(window["-CANVAS-"].TKCanvas, fig)
 
+curr_agg = None
 
 # Create an event loop
 while True:
     event, values = window.read()
     # End program if user closes window or
     # presses the OK button
-    if event == "OK" or event == sg.WIN_CLOSED:
+    
+    if event == "EXIT" or event == sg.WIN_CLOSED:
         break
-    if event == "-FOLDER-":
+    if event == "-FOLDER-": # folder was chosen
         folder = values["-FOLDER-"]
         try:
-            # Get list of files in folder
             file_list = os.listdir(folder)
         except:
             file_list = []
-
         fnames = [f for f in file_list if os.path.isfile(os.path.join(folder, f))
                   and f.lower().endswith((".p"))]
-        print(fnames)
         window["-FILE LIST-"].update(fnames)
-    elif event == "-FILE LIST-":  # A file was chosen from the listbox
+    elif event == "-FILE LIST-":  # file was chosen from the listbox
         try:
             filename = os.path.join(
                 values["-FOLDER-"], values["-FILE LIST-"][0]
             )
-            # TODO: get fig and window['-CANVAS-']-update(fig)
-            #window["-TOUT-"].update(filename)
-            #window["-IMAGE-"].update(filename=filename)
+            # update canvas
+            if curr_agg is not None:
+                curr_agg.get_tk_widget().forget()
+            curr_agg = update_canvas(window["-CANVAS-"].TKCanvas, filename)
         except:
             pass
+
 
 window.close()

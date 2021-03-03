@@ -80,25 +80,18 @@ Includes:
 * [smart_krit.py](https://github.com/PhilippBrendel/bevrp/blob/main/smart_krit.py): direct solver of BEVRP
 * [greedy.py](https://github.com/PhilippBrendel/bevrp/blob/main/greedy.py): implementation of Greedy-2 heuristic
 * [visualizers.py](https://github.com/PhilippBrendel/bevrp/blob/main/visualizers.py): visualization tools
-* [utils.py](https://github.com/PhilippBrendel/bevrp/blob/main/utils.py): helper functions
-* [pypeline.py](https://github.com/PhilippBrendel/bevrp/blob/main/pypeline.py): automatization script for sequential solving of multiple instances 
+* [utils.py](https://github.com/PhilippBrendel/bevrp/blob/main/utils.py): various helper functions
+* [pypeline.py](https://github.com/PhilippBrendel/bevrp/blob/main/pypeline.py): automatization script for sequential solving of multiple instances via many config-files 
 * [config.yaml](https://github.com/PhilippBrendel/bevrp/blob/main/config.yaml): examplary config-file
-* examplary data containing energy consumers, producers and vehicles
+* [data](https://github.com/PhilippBrendel/bevrp/blob/main/data): examplary data containing energy consumers, producers and vehicles from Kaiserslautern
+* [showroom](https://github.com/PhilippBrendel/bevrp/blob/main/showroom): A selection of solution instances that can be viewed right away
 
-
-<!--
-### Built With
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
--->
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Just set up a gurobi licence, anaconda and go.
+To Use the code you require a license for the Gurobi optimization software as well as a Python distribution such as Anaconda.
 
 ### Prerequisites
 
@@ -122,11 +115,6 @@ conda env create -f bevrp.yml
 ```sh
 grbgetkey xxxxxxxx-xxxx...
 ```
-<!--4. Enter your API in `config.js`
-```JS
-const API_KEY = 'ENTER YOUR API';
-```
--->
 
 
 <!-- USAGE EXAMPLES -->
@@ -137,20 +125,29 @@ const API_KEY = 'ENTER YOUR API';
 Configure YAML-file for your problem. 
 Default file used is *bevrp/config.yaml* if not specified otherwise via cmd-line option (see below).
 
-### Start Optimization
+### Start Optimizing
 
 Direct solver:
-```py
+```sh
 python smart_krit.py -c my_sk_config.yaml
 ```
 
 Greedy-2 heuristic:
-```py
+```sh
 python greedy2.py -c my_greedy_config.yaml
 ```
 
 _For more examples, please refer to the [TODO](https://example.com)_
 
+
+### Visualize your Results
+
+The included visualization tools are executed by specifying the path to the desired solution files - both the .txt and .p need to exist at the same location:
+```
+python visualizers.py -n /path/to/my/results/name_of_the_instance
+```
+
+There is also a simple GUI provided 
 
 
 <!-- ROADMAP -->
@@ -194,6 +191,7 @@ Project Link: [https://github.com/PhilippBrendel/bevrp](https://github.com/Phili
 * [Gurobi](https://www.gurobi.com/)
 * [Anaconda](https://www.anaconda.com/)
 * [Conda Cheat Sheet](https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf)
+* [PySimpleGUI](https://pypi.org/project/PySimpleGUI/)
 
 
 

@@ -95,9 +95,6 @@ class visuals:
                             'C': False, 'O': False}
         self.show_n_info = {'D': False, 'P': False, 
                             'C': False, 'O': False}
-
-        self.time_series_plots()
-        self.interactive_plot()
         
 
     def update_annot_v(self,v, n_type):
@@ -543,7 +540,8 @@ class visuals:
         ax[v_ax].legend(loc='upper left')
         ax[v_ax].hlines(0, -1, self.t_steps+1, 'k', 
                     'dashed',)
-        plt.draw()     
+        #plt.draw()     
+        return fig
 
 
 if __name__ == "__main__":
@@ -591,6 +589,8 @@ if __name__ == "__main__":
     
     with open(p_path,'rb') as pickle_file:
         model_dict = pickle.load(pickle_file)
-    visuals(model_dict, txt_path)
+    my_vis = visuals(model_dict, txt_path)
+    my_vis.time_series_plots()
+    my_vis.interactive_plot()
 
     
