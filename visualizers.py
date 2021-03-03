@@ -78,12 +78,12 @@ class visuals:
 
         # setting for time_series_plot
         self.show_fictive_soc = True
-        self.show_producers = True
+        self.show_producers = False
         self.label_vehicles = False
         self.cummulative_E_nt = False
         # Settings for interactive_plot
         self.n_color = {'P': 'b', 
-                        'C': 'g', 
+                        'C': 'r', 
                         'D': 'k',
                         'O': 'darkgrey'}
         self.circle_rad = {'D': 0.0002, 'P': 0.0002, 
@@ -97,7 +97,8 @@ class visuals:
                             'C': False, 'O': False}
 
         self.time_series_plots()
-        #self.interactive_plot()
+        self.interactive_plot()
+        
 
     def update_annot_v(self,v, n_type):
         '''
@@ -372,9 +373,9 @@ class visuals:
             v_ax = 1
             fig, ax = plt.subplots(2)
 
-        p_color = self.n_color['P']
+        p_color = 'b'
         p_color_2 = 'grey'
-        c_color = self.n_color['C']
+        c_color = 'g'
         c_color_2 =  'grey'
 
         cons = np.zeros(self.t_steps)
@@ -394,14 +395,14 @@ class visuals:
                     soc[t] = self.s_nt[n,t] #/ self.S_n_max[n]
                     cons[t] += self.E_nt[n,t] 
                 if len(S_c_max) == 0:
-                    ax[0].plot(soc,'{}-'.format(self.n_color['C']), 
+                    ax[0].plot(soc,'{}-'.format(c_color), 
                                label='mit SmartKrit')
                     if self.show_fictive_soc:
                         ax[0].plot(soc_fictive, '{}--'.format(
                                 'r'),
                                 label=('ohne SmartKrit')) 
                 else:
-                    ax[0].plot(soc,'{}-'.format(self.n_color['C']))
+                    ax[0].plot(soc,'{}-'.format(c_color))
                     if self.show_fictive_soc:
                         ax[0].plot(soc_fictive, '{}--'.format(
                             'r'))
@@ -542,8 +543,7 @@ class visuals:
         ax[v_ax].legend(loc='upper left')
         ax[v_ax].hlines(0, -1, self.t_steps+1, 'k', 
                     'dashed',)
-        plt.draw()
-        plt.show()      
+        plt.draw()     
 
 
 if __name__ == "__main__":
