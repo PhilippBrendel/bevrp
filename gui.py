@@ -6,94 +6,105 @@ import os
 from visualizers import visuals
 import pickle
 
-fig = matplotlib.figure.Figure(figsize=(5, 4), dpi=100)
-t = np.arange(0, 3, .01)
-fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
-
 matplotlib.use("TkAgg")
 
-def update_canvas(canvas, filename):
-    
-    with open(filename,'rb') as pickle_file:
-        model_dict = pickle.load(pickle_file)
-        
-    txt_path = os.path.splitext(filename)[0] + '.txt'
-    my_vis = visuals(model_dict, txt_path)
-    fig = my_vis.time_series_plots()
 
-    figure_canvas_agg = FigureCanvasTkAgg(fig, canvas)
-    figure_canvas_agg.draw()
-    figure_canvas_agg.get_tk_widget().pack(side="top", fill="both", expand=1)
-    
-    return figure_canvas_agg
-
-def delete_figure_agg(figure_agg):
-    figure_agg.get_tk_widget().forget()
-
-# LAYOUT
-file_list_column = [[sg.Text("Showroom"), 
-                     sg.In(size=(25, 1), enable_events=True, key="-FOLDER-"),
-                     sg.FolderBrowse(),],
-                    [sg.Listbox(values=[], 
-                                enable_events=True,
-                                size=(40, 20),
-                                key="-FILE LIST-")],
+class my_gui():
+    def __init__(self):
+        self.curr_IP = None
+        self.curr_TSP = None
+        # LAYOUT
+        file_col = [[sg.Text("Result directory:")], 
+                    [sg.In(size=(25, 1), enable_events=True, key='FOLDER'), sg.FolderBrowse(),],
+                    [sg.Text('Choose your result file:')],
+                    [sg.Listbox(values=[], enable_events=True, size=(32, 10), key='FILE_LIST')]
                     ]
 
-canvas_column = [[sg.Text('Canvas', justification='center')],
-                 [sg.Canvas(key="-CANVAS-")],
-                 [sg.Button("PREVIOUS"), sg.Button("NEXT")]]
+        ip_col = [[sg.Text('Interactive Plot', justification='center')],
+                  [sg.Canvas(key="IP")],
+                  [sg.Button("PREVIOUS"), sg.Button("NEXT")]]
 
-layout = [
-    [sg.Text("My GUI")],
-    [sg.Column(file_list_column), 
-     sg.VSeperator(),
-     sg.Column(canvas_column),
-    ],
-    [sg.Button("EXIT")],
-]
+        tsp_col = [[sg.Text('Time-Series Plot', justification='center')],
+                     [sg.Canvas(key='TSP')]]
 
-# Create window with layout
-window = sg.Window(
-    "My GUI",
-    layout,
-    location=(0, 0),
-    finalize=True,
-    element_justification="center",
-    font="Helvetica 18",
-)
+        layout = [[sg.Text("My SmartKrit")],
+                  [sg.Column(file_col), sg.VSeperator(), sg.Column(ip_col),
+                   sg.VSeperator(), sg.Column(tsp_col)],
+                  [sg.Button("EXIT")]]
 
+        # Create window with layout
+        self.window = sg.Window("SmartKrit - GUI", layout, location=(0, 0), finalize=True,
+                                element_justification="center", font="Helvetica 18",)
+        self.run()
 
-curr_agg = None
+    def init_figures(self, filename):
+        '''
+        '''
+        with open(filename,'rb') as pickle_file:
+            model_dict = pickle.load(pickle_file)
+            
+        txt_path = os.path.splitext(filename)[0] + '.txt'
+        self.visuals = visuals(model_dict, txt_path)
+        self.ip_fig = self.visuals.interactive_plot(from_gui=True)
+        self.tsp_fig = self.visuals.time_series_plots()
 
-# Create an event loop
-while True:
-    event, values = window.read()
-    # End program if user closes window or
-    # presses the OK button
-    
-    if event == "EXIT" or event == sg.WIN_CLOSED:
-        break
-    if event == "-FOLDER-": # folder was chosen
-        folder = values["-FOLDER-"]
-        try:
-            file_list = os.listdir(folder)
-        except:
-            file_list = []
-        fnames = [f for f in file_list if os.path.isfile(os.path.join(folder, f))
-                  and f.lower().endswith((".p"))]
-        window["-FILE LIST-"].update(fnames)
-    elif event == "-FILE LIST-":  # file was chosen from the listbox
-        try:
-            filename = os.path.join(
-                values["-FOLDER-"], values["-FILE LIST-"][0]
-            )
-            # update canvas
-            if curr_agg is not None:
-                curr_agg.get_tk_widget().forget()
-            curr_agg = update_canvas(window["-CANVAS-"].TKCanvas, filename)
-        except:
-            pass
+    def draw_ip_fig(self):
+        '''
+        Uses the currently set Interactive Plot figure
+        and draws it in the GUI
+        '''
+        if self.curr_IP is not None:
+            self.curr_IP.get_tk_widget().forget()
+        self.curr_IP = FigureCanvasTkAgg(self.ip_fig, self.window['IP'].TKCanvas)
+        self.curr_IP.draw()
+        self.curr_IP.get_tk_widget().pack(side="top", fill="both", expand=1)
 
+    def draw_tsp_fig(self):
+        '''
+        Uses the currently set Time-Series Plot figure
+        and draws it in the GUI
+        '''
+        if self.curr_TSP is not None:
+            self.curr_TSP.get_tk_widget().forget()
+        self.curr_TSP = FigureCanvasTkAgg(self.tsp_fig, self.window['TSP'].TKCanvas)
+        self.curr_TSP.draw()
+        self.curr_TSP.get_tk_widget().pack(side="top", fill="both", expand=1)
 
-window.close()
+    def run(self):
+        while True:
+            event, values = self.window.read()
+            if event == "EXIT" or event == sg.WIN_CLOSED:
+                break
+            if event == 'FOLDER': # folder was chosen
+                folder = values['FOLDER']
+                try:
+                    file_list = os.listdir(folder)
+                except:
+                    file_list = []
+                fnames = [f for f in file_list if os.path.isfile(os.path.join(folder, f))
+                        and f.lower().endswith((".p"))]
+                self.window['FILE_LIST'].update(fnames)
+            elif event == 'FILE_LIST':  # file was chosen from the listbox
+                try:
+                    filename = os.path.join(values['FOLDER'], values['FILE_LIST'][0])
+                    self.init_figures(filename)
+                    self.draw_ip_fig()
+                    self.draw_tsp_fig()
+                except:
+                    pass
+            elif event == 'PREVIOUS':
+                if self.visuals.t_ind >= 1:
+                    self.visuals.ax.clear()
+                    self.visuals.t_ind -= 1
+                    self.ip_fig = self.visuals.update_plot(from_gui=True)
+                    self.draw_ip_fig()
+            elif event == 'NEXT':
+                if self.visuals.t_ind  < self.visuals.t_steps - 1:
+                    self.visuals.ax.clear()
+                    self.visuals.t_ind += 1
+                    self.ip_fig = self.visuals.update_plot(from_gui=True)
+                    self.draw_ip_fig()
+        self.window.close()
+
+if __name__ == "__main__":
+    gui = my_gui()
