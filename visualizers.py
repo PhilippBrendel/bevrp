@@ -10,7 +10,7 @@ import os
 from datetime import datetime, timedelta
 import pickle
 from utils import *
-                    
+
 
 class visuals:
     def __init__(self, model_dict, out_file):
@@ -95,7 +95,6 @@ class visuals:
                             'C': False, 'O': False}
         self.show_n_info = {'D': False, 'P': False, 
                             'C': False, 'O': False}
-        
 
     def update_annot_v(self,v, n_type):
         '''
@@ -209,13 +208,17 @@ class visuals:
                         self.annot.set_visible(False)
                         self.fig.canvas.draw_idle()
 
-    def interactive_plot(self):
+    def interactive_plot(self, from_gui=True):
         '''
         Initialize interactive plot with fixed elements 
         like buttons.
+
+        Args:
+            - draw_buttons(bool): optionally draw buttons
         '''
         # initialize plot with fixed elements
         self.fig, self.ax = plt.subplots()
+        
         #img = plt.imread("images/osm_KL.png")
         #self.ax.imshow(img, extent=[7.6516, 7.8935, 
         #                            49.4042, 49.5075])
@@ -223,16 +226,17 @@ class visuals:
                                     self.hover)
         self.fig.canvas.mpl_connect("key_press_event", self.press)
 
-        axprev = plt.axes([0.7, 0.05, 0.1, 0.075])
-        axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
-        bnext = Button(axnext, 'Next')
-        bnext.on_clicked(self.next)
-        bprev = Button(axprev, 'Previous')
-        bprev.on_clicked(self.prev) 
+        if not from_gui:
+            axprev = plt.axes([0.7, 0.05, 0.1, 0.075])
+            axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
+            bnext = Button(axnext, 'Next')
+            bnext.on_clicked(self.next)
+            bprev = Button(axprev, 'Previous')
+            bprev.on_clicked(self.prev) 
 
         self.t_ind = 0
-        self.update_plot()
-        plt.draw()
+        self.update_plot(from_gui)
+        return self.fig
 
     def next(self, event):
         '''
@@ -254,7 +258,7 @@ class visuals:
             self.update_plot()
             plt.draw()
 
-    def update_plot(self):
+    def update_plot(self, from_gui=False):
         '''
         Called initially and when either next or prev is clicked.
         '''
@@ -289,7 +293,6 @@ class visuals:
             self.ax.text(n_x-n_rad, n_y + 2*n_rad, 
                          self.n_names[n], ha='left', zorder=0, 
                         visible=self.show_n_name[n_type])
-            
 
             # find vehicles at each node
             v_list = []
@@ -355,8 +358,11 @@ class visuals:
                 self.n_circle[n] = self.ax.add_artist(
                                    plt.Circle((n_x, n_y), n_rad, 
                                               color=n_color))
-
-        plt.show()
+    
+        if from_gui:
+            return self.fig
+        else:
+            plt.show()
 
     def time_series_plots(self):
         '''
@@ -592,5 +598,6 @@ if __name__ == "__main__":
     my_vis = visuals(model_dict, txt_path)
     my_vis.time_series_plots()
     my_vis.interactive_plot()
+    plt.show()
 
     
