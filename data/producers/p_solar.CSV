@@ -1,7 +1,0 @@
-ID,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
-solar unit 5,81.355,0,81.355,solar.CSV,200,5,49.44168,7.753078
-solar unit 6,40.81,0,40.81,solar.CSV,200,5,49.441886,7.753456
-solar unit 7,80,0,80,solar.CSV,200,5,49.437476,7.757711
-solar unit 8,80.33,0,80.33,solar.CSV,200,5,49.443452,7.763698
-solar unit 37,66,0,66,solar.CSV,200,5,49.434118,7.763209
-

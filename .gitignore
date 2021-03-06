@@ -6,3 +6,8 @@
 */.idea/
 /.idea/
 /output/
+/data/consumers
+/data/producers
+/data/vehicles
+/data/depots
+/data/others
