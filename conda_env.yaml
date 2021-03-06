@@ -8,3 +8,6 @@ dependencies:
   - pyyaml
   - matplotlib
   - pandas
+  - pip
+  - pip:
+    - PySimpleGUI

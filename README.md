@@ -57,7 +57,7 @@
 * [About the Project](#about-the-project)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
+  * [Setup](#setup)
 * [Usage](#usage)
   * [Configuration](#configuration)
   * [Optimization](#optimization)
@@ -75,8 +75,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-This project provides code to solve the bidirectional routing problem.
-The direct implementation as well as a greedy heuristic Greedy-2.
+This project includes code to solve the Bi-directional electric vehicle routing problem (B-EVRP).
 
 ### Included
 
@@ -104,18 +103,22 @@ To Use the code you require a license for the Gurobi optimization software as we
 * [Anaconda](https://www.anaconda.com/)
 
 
-### Installation
+### Setup
 
 <!-- 1. Get a free API Key at [https://example.com](https://example.com) -->
 1. Clone the repo
 ```sh
 git clone https://github.com/PhilippBrendel/bevrp.git
 ```
-2. Create Conda environmemt via provided yml-file
+2. Create Conda environmemt via provided YAML-file
 ```sh
-conda env create -f bevrp.yml
+conda env create -f conda_env.yaml
 ```
-3. Install Gurobi licence
+3. Activate Conda environmemt
+```sh
+conda activate bevrp
+```
+4. Install Gurobi licence
 ```sh
 grbgetkey xxxxxxxx-xxxx...
 ```
@@ -156,6 +159,10 @@ There is also a simple GUI provided that is called via:
 python gui.py
 ```
 
+1. Choose the directory that contains your result files (e.g. *my_results.p* and *my_results.txt*)
+2. Select the respective solution files from the file-list
+3. The Solutions will be visualized automatically
+
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -166,7 +173,7 @@ See the [open issues](https://github.com/PhilippBrendel/bevrp/issues) for a list
 
 <!-- CONTRIBUTING -->
 ## Contributing
-
+TODO
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
