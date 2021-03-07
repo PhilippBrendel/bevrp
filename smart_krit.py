@@ -57,7 +57,7 @@ class my_sk():
         self.vehicle_data = get_vehicle_data(yaml_dict)
         self.vehicles = range(self.vehicle_data.shape[0])
 
-        self.instance_str = '{}c{}p{}t{}v'.format(
+        self.instance_str = '{:02d}c_{:02d}p_{:03d}t_{:02d}v'.format(
             len(self.consumers),
             len(self.producers),
             self.t_steps-1,
