@@ -38,8 +38,9 @@ class my_gui():
                                 element_justification="center", font="Helvetica 18",)
         # Default Folder setting
         self.window['FOLDER'].update(default_dir)
-        file_list = os.listdir(default_dir)
-        fnames = [f for f in file_list if os.path.isfile(os.path.join(default_dir, f))
+        all_files = [os.path.join(dp, f) for dp, dn, fn in os.walk(default_dir) for f in fn]
+        rel_path = [os.path.relpath(f, default_dir) for f in all_files]
+        fnames = [f for f in rel_path if os.path.isfile(os.path.join(default_dir, f))
                         and f.lower().endswith((".p"))]
         self.window['FILE_LIST'].update(fnames)
 
@@ -87,11 +88,9 @@ class my_gui():
                 break
             if event == 'FOLDER': # folder was chosen
                 folder = values['FOLDER']
-                try:
-                    file_list = os.listdir(folder)
-                except:
-                    file_list = []
-                fnames = [f for f in file_list if os.path.isfile(os.path.join(folder, f))
+                all_files = [os.path.join(dp, f) for dp, dn, fn in os.walk(folder) for f in fn]
+                rel_path = [os.path.relpath(f, folder) for f in all_files]
+                fnames = [f for f in rel_path if os.path.isfile(os.path.join(folder, f))
                         and f.lower().endswith((".p"))]
                 self.window['FILE_LIST'].update(fnames)
             elif event == 'FILE_LIST':  # file was chosen from the listbox
