@@ -5,12 +5,13 @@ import matplotlib
 import os
 from visualizers import visuals
 import pickle
+import argparse
 
 matplotlib.use("TkAgg")
 
 
 class my_gui():
-    def __init__(self):
+    def __init__(self, default_dir):
         self.curr_IP = None
         self.curr_TSP = None
         # LAYOUT
@@ -35,7 +36,13 @@ class my_gui():
         # Create window with layout
         self.window = sg.Window("SmartKrit - GUI", layout, location=(0, 0), finalize=True,
                                 element_justification="center", font="Helvetica 18",)
-        self.run()
+        # Default Folder setting
+        self.window['FOLDER'].update(default_dir)
+        file_list = os.listdir(default_dir)
+        fnames = [f for f in file_list if os.path.isfile(os.path.join(default_dir, f))
+                        and f.lower().endswith((".p"))]
+        self.window['FILE_LIST'].update(fnames)
+
 
     def init_figures(self, filename):
         '''
@@ -56,6 +63,9 @@ class my_gui():
         if self.curr_IP is not None:
             self.curr_IP.get_tk_widget().forget()
         self.curr_IP = FigureCanvasTkAgg(self.ip_fig, self.window['IP'].TKCanvas)
+        # reconnect canvas via mpl_connect
+        self.curr_IP.mpl_connect("motion_notify_event", self.visuals.hover)
+        self.curr_IP.mpl_connect("key_press_event", self.visuals.press)
         self.curr_IP.draw()
         self.curr_IP.get_tk_widget().pack(side="top", fill="both", expand=1)
 
@@ -107,4 +117,11 @@ class my_gui():
         self.window.close()
 
 if __name__ == "__main__":
-    gui = my_gui()
+    parser = argparse.ArgumentParser(
+                        description='Visualize a specific file.')
+    parser.add_argument('-d', '--directory', 
+                        dest='dir', default='D:/projects/MA_YRC/bevrp/showroom/obj0', 
+                        help='Default result directory')
+    args = parser.parse_args()
+    gui = my_gui(args.dir)
+    gui.run()

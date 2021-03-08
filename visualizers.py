@@ -219,14 +219,11 @@ class visuals:
         # initialize plot with fixed elements
         self.fig, self.ax = plt.subplots()
         
-        #img = plt.imread("images/osm_KL.png")
-        #self.ax.imshow(img, extent=[7.6516, 7.8935, 
-        #                            49.4042, 49.5075])
-        self.fig.canvas.mpl_connect("motion_notify_event", 
-                                    self.hover)
-        self.fig.canvas.mpl_connect("key_press_event", self.press)
 
         if not from_gui:
+            self.fig.canvas.mpl_connect("motion_notify_event", 
+                                    self.hover)
+            self.fig.canvas.mpl_connect("key_press_event", self.press)
             axprev = plt.axes([0.7, 0.05, 0.1, 0.075])
             axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
             bnext = Button(axnext, 'Next')
@@ -258,7 +255,7 @@ class visuals:
             self.update_plot()
             plt.draw()
 
-    def update_plot(self, from_gui=False):
+    def update_plot(self, from_gui=False, show_map=True):
         '''
         Called initially and when either next or prev is clicked.
         '''
@@ -271,6 +268,11 @@ class visuals:
                     arrowprops=dict(arrowstyle="->"))
         self.annot.set_visible(False)
         self.ax.set_title('{}'.format(self.title_str[t]), fontsize=15)
+
+        if show_map:
+            img = plt.imread("images/osm_KL.png")
+            self.ax.imshow(img, extent=[7.6516, 7.8935, 
+                                        49.4042, 49.5075])
 
         # dicts to save circle objects, 
         # nodes and coordinates of vehicles
