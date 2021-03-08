@@ -11,6 +11,28 @@ from datetime import datetime, timedelta
 import pickle
 from utils import *
 
+# Print iterations progress
+def get_progress_bar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', unfill = '-'):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    #percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + unfill * (length - filledLength)
+    bar_str = f'{prefix} |{bar}| {suffix}'
+    return bar_str
+    # Print New Line on Complete
+    if iteration == total: 
+        print()
 
 class visuals:
     def __init__(self, model_dict, out_file):
@@ -267,7 +289,10 @@ class visuals:
                     bbox=dict(boxstyle="round", fc="w"),
                     arrowprops=dict(arrowstyle="->"))
         self.annot.set_visible(False)
-        self.ax.set_title('{}'.format(self.title_str[t]), fontsize=15)
+        prog_bar = get_progress_bar(t, self.t_steps-1, prefix=self.title_str[0],
+                                    suffix=self.title_str[-1], decimals=0, length=25)
+        # u"\u25CF"
+        self.ax.set_title('{}\n{}\n'.format(self.title_str[t], prog_bar), fontsize=15)
 
         if show_map:
             img = plt.imread("images/osm_KL.png")

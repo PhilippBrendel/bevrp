@@ -21,8 +21,7 @@ class my_gui():
                     [sg.Listbox(values=[], enable_events=True, size=(32, 10), key='FILE_LIST')]
                     ]
 
-        ip_col = [[sg.ProgressBar(5, orientation='h', size=(51, 10), key='PROGRESSBAR')],
-                  [sg.Text('Interactive Plot', justification='center')],
+        ip_col = [[sg.Text('Interactive Plot', justification='center')],
                   [sg.Canvas(key="IP")],
                   [sg.Button("PREVIOUS"), sg.Button("NEXT")]]
 
@@ -54,7 +53,6 @@ class my_gui():
         txt_path = os.path.splitext(filename)[0] + '.txt'
         self.visuals = visuals(model_dict, txt_path)
         self.ip_fig = self.visuals.interactive_plot(from_gui=True)
-        self.window['PROGRESSBAR'].UpdateBar(0, self.visuals.t_steps-1)
         self.tsp_fig = self.visuals.time_series_plots()
 
     def draw_ip_fig(self):
@@ -108,14 +106,12 @@ class my_gui():
                     self.visuals.t_ind -= 1
                     self.ip_fig = self.visuals.update_plot(from_gui=True)
                     self.draw_ip_fig()
-                    self.window['PROGRESSBAR'].update(self.visuals.t_ind)
             elif event == 'NEXT':
                 if self.visuals.t_ind  < self.visuals.t_steps - 1:
                     self.visuals.ax.clear()
                     self.visuals.t_ind += 1
                     self.ip_fig = self.visuals.update_plot(from_gui=True)
                     self.draw_ip_fig()
-                    self.window['PROGRESSBAR'].update(self.visuals.t_ind)
         self.window.close()
 
 if __name__ == "__main__":
