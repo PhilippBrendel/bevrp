@@ -25,8 +25,15 @@ class my_gui():
                   [sg.Canvas(key="IP")],
                   [sg.Button("PREVIOUS"), sg.Button("NEXT")]]
 
-        tsp_col = [[sg.Text('Time-Series Plot', justification='center')],
-                     [sg.Canvas(key='TSP')]]
+        tsp_col = [[sg.Frame(layout=[[sg.Checkbox('Show Producer', default=True, key='SHOW_PROD'), 
+                                      sg.Checkbox('Show all Vehicles', default=False, key='SHOW_ALL_V')],
+                                     [sg.Checkbox('Show fictive SOC', default=False, key='SHOW_FICTIVE'),
+                                      sg.Checkbox('Show cumm. Cons./Prod.', default=False, key='SHOW_E_NT')],
+                                     [sg.Button("APPLY")]
+                                     ], 
+                             title='Options', title_color='red', relief=sg.RELIEF_SUNKEN, tooltip='Use these to set flags')],
+                    [sg.Text('Time-Series Plot', justification='center')],
+                    [sg.Canvas(key='TSP')]]
 
         layout = [[sg.Text("My SmartKrit")],
                   [sg.Column(file_col), sg.VSeperator(), sg.Column(ip_col),
@@ -52,6 +59,11 @@ class my_gui():
             
         txt_path = os.path.splitext(filename)[0] + '.txt'
         self.visuals = visuals(model_dict, txt_path)
+        
+        self.visuals.show_fictive_soc = False
+        self.visuals.show_producers = True
+        self.visuals.label_vehicles = False
+        self.visuals.cummulative_E_nt = False
         self.ip_fig = self.visuals.interactive_plot(from_gui=True)
         self.tsp_fig = self.visuals.time_series_plots()
 
@@ -112,6 +124,14 @@ class my_gui():
                     self.visuals.t_ind += 1
                     self.ip_fig = self.visuals.update_plot(from_gui=True)
                     self.draw_ip_fig()
+            elif event == 'APPLY':
+                self.visuals.show_fictive_soc = values['SHOW_FICTIVE']
+                self.visuals.show_producers = values['SHOW_PROD']
+                self.visuals.label_vehicles = values['SHOW_ALL_V']
+                self.visuals.cummulative_E_nt = values['SHOW_E_NT']
+                self.tsp_fig = self.visuals.time_series_plots()
+                self.draw_tsp_fig()
+
         self.window.close()
 
 if __name__ == "__main__":

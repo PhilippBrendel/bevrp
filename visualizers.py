@@ -100,7 +100,7 @@ class visuals:
 
         # setting for time_series_plot
         self.show_fictive_soc = True
-        self.show_producers = False
+        self.show_producers = True
         self.label_vehicles = False
         self.cummulative_E_nt = False
         # Settings for interactive_plot
@@ -388,8 +388,8 @@ class visuals:
     
         if from_gui:
             return self.fig
-        else:
-            plt.show()
+        #else:
+        #    plt.show()
 
     def time_series_plots(self):
         '''
@@ -502,7 +502,7 @@ class visuals:
         ax[0].tick_params(axis='y', colors=c_color)
         ax[0].set_xticks(np.arange(0, self.t_steps, step=1))
         ax[0].set_xticklabels(self.x_tick_str[::1])
-        ax[0].set_title('Energieversorgung Konsumenten', fontsize=25)
+        ax[0].set_title('Energieversorgung Konsumenten', fontsize=15)
         ax[0].set_ylim([-1.5*max(S_c_max),1.1*max(S_c_max)])
         ax[0].set_ylabel('(kWh)')
         leg_0 = ax[0].legend(loc='upper left')
@@ -529,6 +529,7 @@ class visuals:
             ax[1].spines['left'].set_color(p_color)
             ax[1].yaxis.label.set_color(p_color)
             ax[1].tick_params(axis='y', colors=p_color)
+            ax[1].set_title('Energie Produzenten', fontsize=15)
             ax[1].set_ylim([-0.1*max(S_p_max),1.1*max(S_p_max)])
             ax[1].set_ylabel('(kWh)')
             leg_1 = ax[1].legend(loc='upper left')
@@ -564,7 +565,7 @@ class visuals:
         y_max = max(max_soc)
         ax[v_ax].set_xticks(np.arange(0, self.t_steps))
         ax[v_ax].set_xticklabels(self.x_tick_str)
-        ax[v_ax].set_title('Fahrzeuge für Energietransport', fontsize=25)
+        ax[v_ax].set_title('Fahrzeuge für Energietransport', fontsize=15)
         ax[v_ax].set_ylim([-0.3*y_max,1.1*y_max])
         #ax[v_ax].set_ylabel('SOC')
         ax[v_ax].yaxis.set_major_formatter(
@@ -573,6 +574,7 @@ class visuals:
         ax[v_ax].legend(loc='upper left')
         ax[v_ax].hlines(0, -1, self.t_steps+1, 'k', 
                     'dashed',)
+        plt.subplots_adjust(hspace=0.5)
         #plt.draw()     
         return fig
 
@@ -585,29 +587,6 @@ if __name__ == "__main__":
                         help=('name / time string of files' +
                               ' to be visualized'))
     args = parser.parse_args()
-    '''
-    base = os.path.abspath(args.name)
-    txt_path = base + '.txt'
-    while not os.path.exists(txt_path):
-        print(f'Warning: {txt_path} does not exist',)
-        if os.path.isdir(base):
-            print('\nSubfolders:')
-            subfolders = os.walk(base)[0][1]
-            print(subfolders)
-            exit()
-            for item in os.walk(base):
-                print(item)
-                print(os.path.basename(item[0]))
-            print('\nTextfiles:')
-            for item in glob.glob('*.txt'):
-                print(item)
-            x = input('\nChoose subdirectory or file_name:')
-        else:
-            exit(f'{base} is not valid')
-        base = os.path.join(base, x)
-        txt_path = base + '.txt'
-    exit()
-    '''
 
     txt_path = args.name + '.txt'
     p_path = args.name + '.p'
