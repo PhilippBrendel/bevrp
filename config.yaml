@@ -23,8 +23,8 @@ other_dir: 'data/others'
 # Data restrictions #
 #####################
 v_max: 40
-c_max: 11
-p_max: 7
+c_max: 18
+p_max: 1
 o_max: 0
 d_max: 1
 lat: [49.00, 49.90]     # min and max vals
@@ -51,7 +51,7 @@ h_init: quick           # [quick, greedy]
 ###################
 # Gurobi settings #
 ###################
-TimeLimit: 3600
+TimeLimit: 100000
 threads: 1
 # multiple threads for parallel work
 # can be restricted in order to save RAM
