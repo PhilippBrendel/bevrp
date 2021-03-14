@@ -91,11 +91,14 @@ class visuals:
         for t in range(self.t_steps):
             now = t_0 + timedelta(hours=t*self.delta_t)
             self.title_str.append(now.strftime('%H:%M'))
-            interval = int(self.t_steps / 10)
-            if t % interval == 0:
-                self.x_tick_str.append(now.strftime('%H:%M'))
+            if self.t_steps >= 10:
+                interval = int(self.t_steps / 10)
+                if t % interval == 0:
+                    self.x_tick_str.append(now.strftime('%H:%M'))
+                else:
+                    self.x_tick_str.append('')
             else:
-                self.x_tick_str.append('')
+                self.x_tick_str.append(now.strftime('%H:%M'))
        
 
         # setting for time_series_plot
@@ -104,6 +107,7 @@ class visuals:
         self.label_vehicles = False
         self.cummulative_E_nt = False
         # Settings for interactive_plot
+        self.show_map = False
         self.n_color = {'P': 'b', 
                         'C': 'r', 
                         'D': 'k',
@@ -277,7 +281,7 @@ class visuals:
             self.update_plot()
             plt.draw()
 
-    def update_plot(self, from_gui=False, show_map=True):
+    def update_plot(self, from_gui=False):
         '''
         Called initially and when either next or prev is clicked.
         '''
@@ -294,7 +298,7 @@ class visuals:
         # u"\u25CF"
         self.ax.set_title('{}\n{}\n'.format(self.title_str[t], prog_bar), fontsize=15)
 
-        if show_map:
+        if self.show_map:
             img = plt.imread("images/osm_KL.png")
             self.ax.imshow(img, extent=[7.6516, 7.8935, 
                                         49.4042, 49.5075])

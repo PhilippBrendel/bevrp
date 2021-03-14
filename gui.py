@@ -21,20 +21,37 @@ class my_gui():
                     [sg.Listbox(values=[], enable_events=True, size=(32, 10), key='FILE_LIST')]
                     ]
 
-        ip_col = [[sg.Text('Interactive Plot', justification='center')],
+        # INTERACTIVE PLOT COLUMN
+        ip_col = [[sg.Frame(layout=[[sg.Checkbox('Show Map', enable_events=True, default=False,
+                                                 key='IP_SHOW_MAP')],
+                                    [sg.Text('X-axis --> MIN:'), sg.InputText('', size=(6,1), 
+                                                                              key='IP_X_MIN'),
+                                     sg.Text('Max: '), sg.InputText('', size=(6,1), key='IP_X_MAX')],
+                                    [sg.Text('Y-axis --> MIN:'), sg.InputText('', size=(6,1),
+                                                                              key='IP_Y_MIN'),
+                                     sg.Text('Max: '), sg.InputText('', size=(6,1), key='IP_Y_MAX')],
+                                    [sg.Button("Apply Limits", enable_events=True, key='IP_APPLY_LIM')]], 
+                            title='Options', title_color='black', relief=sg.RELIEF_SUNKEN,
+                            tooltip='Use these to set flags')],
+                  [sg.Text('Interactive Plot', justification='center')],
                   [sg.Canvas(key="IP")],
-                  [sg.Button("PREVIOUS"), sg.Button("NEXT")]]
+                  [sg.Button("PREVIOUS", key='IP_PREVIOUS'), sg.Button("NEXT", key='IP_NEXT')]]
 
-        tsp_col = [[sg.Frame(layout=[[sg.Checkbox('Show Producer', default=True, key='SHOW_PROD'), 
-                                      sg.Checkbox('Show all Vehicles', default=False, key='SHOW_ALL_V')],
-                                     [sg.Checkbox('Show fictive SOC', default=False, key='SHOW_FICTIVE'),
-                                      sg.Checkbox('Show cumm. Cons./Prod.', default=False, key='SHOW_E_NT')],
-                                     [sg.Button("APPLY")]
-                                     ], 
-                             title='Options', title_color='red', relief=sg.RELIEF_SUNKEN, tooltip='Use these to set flags')],
+        # TIME-SERIES-PLOT COLUMN
+        tsp_col = [[sg.Frame(layout=[[sg.Checkbox('Show Producer', enable_events=True,
+                                                  default=True, key='TSP_SHOW_PROD'), 
+                                      sg.Checkbox('Show all Vehicles', enable_events=True,
+                                                  default=False, key='TSP_SHOW_ALL_V')],
+                                     [sg.Checkbox('Show fictive SOC', enable_events=True,
+                                                  default=False, key='TSP_SHOW_FICTIVE'),
+                                      sg.Checkbox('Show cumm. Cons./Prod.', enable_events=True,
+                                                  default=False, key='TSP_SHOW_E_NT')],], 
+                             title='Options', title_color='black', relief=sg.RELIEF_SUNKEN,
+                             tooltip='Use these to set flags')],
                     [sg.Text('Time-Series Plot', justification='center')],
                     [sg.Canvas(key='TSP')]]
 
+        # Connect columns
         layout = [[sg.Text("My SmartKrit")],
                   [sg.Column(file_col), sg.VSeperator(), sg.Column(ip_col),
                    sg.VSeperator(), sg.Column(tsp_col)],
@@ -59,13 +76,17 @@ class my_gui():
             
         txt_path = os.path.splitext(filename)[0] + '.txt'
         self.visuals = visuals(model_dict, txt_path)
-        
         self.visuals.show_fictive_soc = False
         self.visuals.show_producers = True
         self.visuals.label_vehicles = False
         self.visuals.cummulative_E_nt = False
         self.ip_fig = self.visuals.interactive_plot(from_gui=True)
         self.tsp_fig = self.visuals.time_series_plots()
+        # write values
+        self.window['IP_X_MIN'].update('{:.3f}'.format(self.visuals.xlim[0]))
+        self.window['IP_X_MAX'].update('{:.3f}'.format(self.visuals.xlim[1]))
+        self.window['IP_Y_MIN'].update('{:.3f}'.format(self.visuals.ylim[0]))
+        self.window['IP_Y_MAX'].update('{:.3f}'.format(self.visuals.ylim[1]))
 
     def draw_ip_fig(self):
         '''
@@ -95,6 +116,8 @@ class my_gui():
     def run(self):
         while True:
             event, values = self.window.read()
+            print(event)
+            #print(values['IP_SHOW_MAP'])
             if event == "EXIT" or event == sg.WIN_CLOSED:
                 break
             if event == 'FOLDER': # folder was chosen
@@ -112,23 +135,42 @@ class my_gui():
                     self.draw_tsp_fig()
                 except:
                     pass
-            elif event == 'PREVIOUS':
-                if self.visuals.t_ind >= 1:
-                    self.visuals.ax.clear()
-                    self.visuals.t_ind -= 1
-                    self.ip_fig = self.visuals.update_plot(from_gui=True)
-                    self.draw_ip_fig()
-            elif event == 'NEXT':
-                if self.visuals.t_ind  < self.visuals.t_steps - 1:
-                    self.visuals.ax.clear()
-                    self.visuals.t_ind += 1
-                    self.ip_fig = self.visuals.update_plot(from_gui=True)
-                    self.draw_ip_fig()
-            elif event == 'APPLY':
-                self.visuals.show_fictive_soc = values['SHOW_FICTIVE']
-                self.visuals.show_producers = values['SHOW_PROD']
-                self.visuals.label_vehicles = values['SHOW_ALL_V']
-                self.visuals.cummulative_E_nt = values['SHOW_E_NT']
+            elif event.startswith('IP'):
+                self.visuals.ax.clear()
+                if event == 'IP_PREVIOUS':
+                    if self.visuals.t_ind >= 1:
+                        self.visuals.t_ind -= 1
+                elif event == 'IP_NEXT':
+                    if self.visuals.t_ind  < self.visuals.t_steps - 1:
+                        self.visuals.t_ind += 1
+                elif event == 'IP_SHOW_MAP':
+                    self.visuals.show_map = values['IP_SHOW_MAP']
+                elif event == 'IP_APPLY_LIM':
+                    update = True
+                    try:
+                        xlim = [float(values['IP_X_MIN']),
+                                float(values['IP_X_MAX'])]
+                        ylim = [float(values['IP_Y_MIN']),
+                                float(values['IP_Y_MAX'])]
+                    except ValueError:
+                        print('whaaat')
+                        update=False
+                    if update:
+                        self.visuals.xlim = xlim
+                        self.visuals.ylim = ylim
+                # Draw IP FIG
+                self.ip_fig = self.visuals.update_plot(from_gui=True)
+                self.draw_ip_fig()
+            elif event.startswith('TSP'):
+                if event == 'TSP_SHOW_FICTIVE':
+                    self.visuals.show_fictive_soc = values['TSP_SHOW_FICTIVE']
+                elif event == 'TSP_SHOW_PROD':
+                    self.visuals.show_producers = values['TSP_SHOW_PROD']
+                elif event == 'TSP_SHOW_ALL_V':
+                    self.visuals.label_vehicles = values['TSP_SHOW_ALL_V']
+                elif event == 'TSP_SHOW_E_NT':
+                    self.visuals.cummulative_E_nt = values['TSP_SHOW_E_NT']
+                # Draw TSP fig    
                 self.tsp_fig = self.visuals.time_series_plots()
                 self.draw_tsp_fig()
 
