@@ -106,6 +106,7 @@ class visuals:
         self.show_producers = True
         self.label_vehicles = False
         self.cummulative_E_nt = False
+        self.show_legends = True
         # Settings for interactive_plot
         self.show_map = False
         self.n_color = {'P': 'b', 
@@ -440,7 +441,8 @@ class visuals:
                     if self.show_fictive_soc:
                         ax[0].plot(soc_fictive, '{}--'.format(
                             'r'))
-                S_c_max.append(max(np.max(soc),self.S_n_max[n]))    
+                # S_c_max.append(max(np.max(soc),self.S_n_max[n]))
+                S_c_max.append(np.max(soc))
             elif self.n_type[n] == 'P' and self.show_producers:
                 soc_fictive = np.zeros(self.t_steps)
                 soc_fictive[0] = self.s_nt[n,0]
@@ -468,7 +470,8 @@ class visuals:
                     soc_p_max = max(np.max(soc), np.max(soc_fictive))
                 else:
                     soc_p_max = np.max(soc)
-                S_p_max.append(max(soc_p_max,self.S_n_max[n]))
+                # S_p_max.append(max(soc_p_max,self.S_n_max[n]))
+                S_p_max.append(np.max(soc_p_max))
 
                 
         
@@ -507,11 +510,15 @@ class visuals:
         ax[0].set_xticks(np.arange(0, self.t_steps, step=1))
         ax[0].set_xticklabels(self.x_tick_str[::1])
         ax[0].set_title('Energieversorgung Konsumenten', fontsize=15)
-        ax[0].set_ylim([-1.5*max(S_c_max),1.1*max(S_c_max)])
+        if self.show_fictive_soc:
+            ax[0].set_ylim([-1.5*max(S_c_max),1.1*max(S_c_max)])
+        else:
+            ax[0].set_ylim([-0.1*max(S_c_max),1.1*max(S_c_max)])
         ax[0].set_ylabel('(kWh)')
-        leg_0 = ax[0].legend(loc='upper left')
-        for text in leg_0.get_texts():
-            text.set_color('k')
+        if self.show_legends:
+            leg_0 = ax[0].legend(loc='upper left')
+            for text in leg_0.get_texts():
+                text.set_color('k')
         ax[0].hlines(0, -1, self.t_steps+1, 'k', 
                     'dashed',)
         if self.cummulative_E_nt:
@@ -520,9 +527,10 @@ class visuals:
             ax_01.tick_params(axis='y', colors=c_color_2)
             ax_01.set_ylim([-0.1*np.max(cons),1.1*np.max(cons)])
             ax_01.set_ylabel('(kWh)')
-            leg_01 = ax_01.legend(loc='upper right')
-            for text in leg_01.get_texts():
-                text.set_color(c_color_2)
+            if self.show_legends:
+                leg_01 = ax_01.legend(loc='upper right')
+                for text in leg_01.get_texts():
+                    text.set_color(c_color_2)
 
         
         # Plot 2: producers
@@ -536,18 +544,21 @@ class visuals:
             ax[1].set_title('Energie Produzenten', fontsize=15)
             ax[1].set_ylim([-0.1*max(S_p_max),1.1*max(S_p_max)])
             ax[1].set_ylabel('(kWh)')
-            leg_1 = ax[1].legend(loc='upper left')
-            for text in leg_1.get_texts():
-                text.set_color(p_color)
+            if self.show_legends:
+                leg_1 = ax[1].legend(loc='upper left')
+                for text in leg_1.get_texts():
+                    text.set_color(p_color)
+            
             if self.cummulative_E_nt:
                 ax_11.spines['right'].set_color(p_color_2)
                 ax_11.yaxis.label.set_color(p_color_2)
                 ax_11.tick_params(axis='y', colors=p_color_2)
                 ax_11.set_ylim([-0.1*np.max(prod),1.1*np.max(prod)])
                 ax_11.set_ylabel('(kWh)')
-                leg_11 = ax_11.legend(loc='upper right')
-                for text in leg_11.get_texts():
-                    text.set_color(p_color_2)
+                if self.show_legends:
+                    leg_11 = ax_11.legend(loc='upper right')
+                    for text in leg_11.get_texts():
+                        text.set_color(p_color_2)
 
 
 
@@ -574,8 +585,8 @@ class visuals:
         #ax[v_ax].set_ylabel('SOC')
         ax[v_ax].yaxis.set_major_formatter(
                     mtick.PercentFormatter(1.0))
-
-        ax[v_ax].legend(loc='upper left')
+        if self.show_legends:
+            ax[v_ax].legend(loc='upper left')
         ax[v_ax].hlines(0, -1, self.t_steps+1, 'k', 
                     'dashed',)
         plt.subplots_adjust(hspace=0.5)

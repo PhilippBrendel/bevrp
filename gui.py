@@ -40,12 +40,14 @@ class my_gui():
         # TIME-SERIES-PLOT COLUMN
         tsp_col = [[sg.Frame(layout=[[sg.Checkbox('Show Producer', enable_events=True,
                                                   default=True, key='TSP_SHOW_PROD'), 
-                                      sg.Checkbox('Show all Vehicles', enable_events=True,
-                                                  default=False, key='TSP_SHOW_ALL_V')],
+                                      sg.Checkbox('Label Vehicles', enable_events=True,
+                                                  default=False, key='TSP_LABEL_V')],
                                      [sg.Checkbox('Show fictive SOC', enable_events=True,
                                                   default=False, key='TSP_SHOW_FICTIVE'),
                                       sg.Checkbox('Show cumm. Cons./Prod.', enable_events=True,
-                                                  default=False, key='TSP_SHOW_E_NT')],], 
+                                                  default=False, key='TSP_SHOW_E_NT')],
+                                      [sg.Checkbox('Show Legends', enable_events=True,
+                                                  default=True, key='TSP_SHOW_LEGENDS')],], 
                              title='Options', title_color='black', relief=sg.RELIEF_SUNKEN,
                              tooltip='Use these to set flags')],
                     [sg.Text('Time-Series Plot', justification='center')],
@@ -166,10 +168,12 @@ class my_gui():
                     self.visuals.show_fictive_soc = values['TSP_SHOW_FICTIVE']
                 elif event == 'TSP_SHOW_PROD':
                     self.visuals.show_producers = values['TSP_SHOW_PROD']
-                elif event == 'TSP_SHOW_ALL_V':
-                    self.visuals.label_vehicles = values['TSP_SHOW_ALL_V']
+                elif event == 'TSP_LABEL_V':
+                    self.visuals.label_vehicles = values['TSP_LABEL_V']
                 elif event == 'TSP_SHOW_E_NT':
                     self.visuals.cummulative_E_nt = values['TSP_SHOW_E_NT']
+                elif event == 'TSP_SHOW_LEGENDS':
+                    self.visuals.show_legends = values['TSP_SHOW_LEGENDS']
                 # Draw TSP fig    
                 self.tsp_fig = self.visuals.time_series_plots()
                 self.draw_tsp_fig()
