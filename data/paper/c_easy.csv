@@ -1,0 +1,16 @@
+ID,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
+mobile radio 28,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.44397,7.705217
+mobile radio 29,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.445083,7.725101
+mobile radio 30,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.440669,7.740357
+mobile radio 31,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.439106,7.741672
+mobile radio 32,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.434393,7.734576
+mobile radio 33,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.435931,7.767463
+mobile radio 34,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.448695,7.776774
+mobile radio 35,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.44827,7.776142
+mobile radio 36,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.440542,7.754968
+mobile radio 37,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.443097,7.771579
+mobile radio 38,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.446506,7.793066
+mobile radio 39,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.447181,7.793116
+mobile radio 40,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.449076,7.785818
+mobile radio 41,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.43143,7.777123
+mobile radio 42,4.8,4.8,4.8,mobile_radio.CSV,50,5,49.429211,7.759584
