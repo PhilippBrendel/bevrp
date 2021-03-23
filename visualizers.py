@@ -235,7 +235,7 @@ class visuals:
                         self.annot.set_visible(False)
                         self.fig.canvas.draw_idle()
 
-    def interactive_plot(self, from_gui=True):
+    def interactive_plot(self, from_gui=False):
         '''
         Initialize interactive plot with fixed elements 
         like buttons.
@@ -260,7 +260,11 @@ class visuals:
 
         self.t_ind = 0
         self.update_plot(from_gui)
-        return self.fig
+
+        if not from_gui:
+            plt.show()
+        else:
+            return self.fig
 
     def next(self, event):
         '''
@@ -281,6 +285,7 @@ class visuals:
             self.t_ind -= 1
             self.update_plot()
             plt.draw()
+            plt.show()
 
     def update_plot(self, from_gui=False):
         '''

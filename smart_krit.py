@@ -1,6 +1,6 @@
 from gurobipy import *
 from utils import *
-import visualizers
+from visualizers import visuals
 import os
 import yaml     # !conda install pyyaml!
 import pickle
@@ -36,6 +36,21 @@ class my_sk():
         self.p_init = yaml_dict['p_init']
         self.vehicle_init = yaml_dict['vehicle_init']
 
+        # data sources
+        self.vehicle_src = yaml_dict['vehicle_dir']
+        self.depot_src = yaml_dict['depot_dir']
+        self.consumer_src = yaml_dict['consumer_dir']
+        self.producer_src = yaml_dict['producer_dir']
+        self.other_src = yaml_dict['other_dir']
+        # Data restrictions
+        self.v_max = yaml_dict['v_max']
+        self.c_max = yaml_dict['c_max']
+        self.p_max = yaml_dict['p_max']
+        self.o_max = yaml_dict['o_max']
+        self.d_max = yaml_dict['d_max']
+        self.lat = yaml_dict['lat']
+        self.lon = yaml_dict['lon']
+
         # gurobi settings
         self.threads = yaml_dict['threads']
         self.method = yaml_dict['method']
@@ -52,7 +67,7 @@ class my_sk():
         self.h_init = yaml_dict['h_init']
 
         # read data
-        self.node_data = get_node_data(yaml_dict)
+        self.get_node_data()
         self.init_nodes()
         self.vehicle_data = get_vehicle_data(yaml_dict)
         self.vehicles = range(self.vehicle_data.shape[0])
@@ -70,7 +85,48 @@ class my_sk():
                                     self.instance_str + '_log.txt')
 
         self.mod = Model("smart_krit")
+
+
+    def get_node_data(self):
+        '''
+        Read node_data from the respective files 
+        in the specified directories.
+        Also omit data outside of the specified lat/lon-ranges.
+
+        Args:
+            yaml_dict (dict): Dictionary containing information 
+                            from config-file 
+        Returns:
+            node_data (pd.Dataframe): Dataframe containing 
+                                    all relevant node_data.
+        '''
+        depot_data = get_pd_frame('D', self.depot_src, 
+                                  self.d_max, self.lat, self.lon)
+        consumer_data = get_pd_frame('C', self.consumer_src, 
+                                    self.c_max, self.lat, self.lon)
+        producer_data = get_pd_frame('P', self.producer_src,
+                                    self.p_max, self.lat, self.lon)
+        node_data = pd.concat([depot_data, consumer_data, 
+                            producer_data], ignore_index=True)
+
+        # this can be used to only include other nodes within
+        # the region defined by all other node types above
+        if False:
+            if np.min(node_data['lat'].values) > self.lat[0]:
+                self.lat[0] = np.min(node_data['lat'].values)
+            if np.max(node_data['lat'].values) < self.lat[1]:
+                self.lat[1] = np.max(node_data['lat'].values)
+            if np.min(node_data['lon'].values) > self.lon[0]:
+                self.lon[0] = np.min(node_data['lon'].values)
+            if np.max(node_data['lon'].values) < self.lon[1]:
+                self.lon[1] = np.max(node_data['lon'].values) 
+
+        other_data = get_pd_frame('O', self.other_src, 
+                                  self.o_max, self.lat, self.lon)
         
+        self.node_data = pd.concat([node_data, other_data], 
+                            ignore_index=True)        
+
 
     def init_nodes(self):
         '''
@@ -473,7 +529,9 @@ class my_sk():
             pickle.dump(model_dict, p_path)
 
         if self.visualize:
-            visualizers.visuals(model_dict, filepath)
+            my_vis = visuals(model_dict, filepath)
+            my_vis.time_series_plots()
+            my_vis.interactive_plot()
 
 
 if __name__ == "__main__":

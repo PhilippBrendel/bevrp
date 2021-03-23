@@ -2,9 +2,9 @@
 # initial settings #
 ####################
 t_0: '10:30'                    # initial clock time
-T: 1.0                         # [h]
-delta_t: 0.05                   # [h]
-c_init: 0.25                     # initial soc of nodes 
+T: 1.5                         # [h]
+delta_t: 0.25                   # [h]
+c_init: 1.0                     # initial soc of nodes 
 p_init: 0.25                     # initial soc of producers
 vehicle_init: 0.1               # initial soc of vehicles 
 
@@ -14,8 +14,8 @@ vehicle_init: 0.1               # initial soc of vehicles
 ##################
 vehicle_dir: 'data/vehicles'
 depot_dir: 'data/depots'
-consumer_dir: 'data/consumers'
-producer_dir: 'data/producers'
+consumer_dir: 'data/paper/c_easy.csv'
+producer_dir: 'data/paper/p_all.csv'
 other_dir: 'data/others'
 
 
@@ -23,9 +23,9 @@ other_dir: 'data/others'
 # Data restrictions #
 #####################
 v_max: 40
-c_max: 18
-p_max: 1
-o_max: 0
+c_max: 100
+p_max: 100
+o_max: 100
 d_max: 1
 lat: [49.00, 49.90]     # min and max vals
 lon: [7.50, 7.90]

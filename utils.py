@@ -56,16 +56,15 @@ def read_variables(grb_mod):
 ##############
 # SMART_KRIT #
 ##############
-def get_pd_frame(n_type, folder, n_max, lat, lon):
+def get_pd_frame(n_type, source, n_max, lat, lon):
     '''
     Find files correlating to nodes of type *n_type* 
-    in a folder *folder* and return the data 
+    from *source* and return the data 
     in a pandas dataframe.  
-    Used by get_vehicle_data() and get_node_data()
 
     Args:
         n_type (str): type of nodes ['P','C','D','O']
-        folder (str): path to folder containing CSV-files
+        source (str): single CSV-file or path to folder containing CSV-files
         n_max (int): maximum number of nodes to return
         lat (tuple): range of latitude to be considered, 
                      i.e. (lat_min,lat_max)
@@ -80,7 +79,13 @@ def get_pd_frame(n_type, folder, n_max, lat, lon):
                 'lat','lon']
     elif n_type in ['D','O']:
         cols = ['ID','lat','lon']
-    files = glob.glob(os.path.join(folder, '*.CSV'))
+    if os.path.isdir(source):
+        files = glob.glob(os.path.join(source, '*.CSV'))
+    elif os.path.isfile(source) and source.endswith('.csv'):
+        files = [source]
+    else:
+        exit(f'Cannot interpret source {source}')
+
     pd_frame = pd.DataFrame(columns=cols)
     for i in range(len(files)):
         frame = pd.read_csv(files[i])
@@ -91,7 +96,8 @@ def get_pd_frame(n_type, folder, n_max, lat, lon):
         if set(cols).issubset(set(frame.columns)):
             pd_frame = pd_frame.append(frame)
         else:
-            print('Missing columns in file {}'.format(files[i]))
+            missing = set(cols) - set(frame.columns)
+            exit('Missing columns {} in file {}'.format(missing, files[i]))
     pd_frame.insert(1,'type', n_type)
 
     return pd_frame[:n_max]
@@ -128,49 +134,6 @@ def get_vehicle_data(yaml_dict):
     v_data = vehicle_data[:v_max]
 
     return v_data
-
-
-def get_node_data(yaml_dict):
-    '''
-    Read node_data from the respective files 
-    in the specified directories.
-    Also omit data outside of the specified lat/lon-ranges.
-
-    Args:
-        yaml_dict (dict): Dictionary containing information 
-                          from config-file 
-    Returns:
-        node_data (pd.Dataframe): Dataframe containing 
-                                  all relevant node_data.
-    '''
-    lat = yaml_dict['lat']
-    lon = yaml_dict['lon'] 
-    depot_data = get_pd_frame('D', yaml_dict['depot_dir'], 
-                              yaml_dict['d_max'], lat, lon)
-    consumer_data = get_pd_frame('C', yaml_dict['consumer_dir'], 
-                                 yaml_dict['c_max'], lat, lon)
-    producer_data = get_pd_frame('P', yaml_dict['producer_dir'],
-                                 yaml_dict['p_max'], lat, lon)
-    node_data = pd.concat([depot_data, consumer_data, 
-                           producer_data], ignore_index=True)
-
-    if False:
-        if np.min(node_data['lat'].values) > lat[0]:
-            lat[0] = np.min(node_data['lat'].values)
-        if np.max(node_data['lat'].values) < lat[1]:
-            lat[1] = np.max(node_data['lat'].values)
-        if np.min(node_data['lon'].values) > lon[0]:
-            lon[0] = np.min(node_data['lon'].values)
-        if np.max(node_data['lon'].values) < lon[1]:
-            lon[1] = np.max(node_data['lon'].values) 
-
-    other_data = get_pd_frame('O', yaml_dict['other_dir'], 
-                              yaml_dict['o_max'], lat, lon)
-    
-    node_data = pd.concat([node_data, other_data], 
-                          ignore_index=True)
-
-    return node_data
 
 
 def get_gc_distance(lat_1, lon_1, lat_2, lon_2):
