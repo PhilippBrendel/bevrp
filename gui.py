@@ -23,31 +23,35 @@ class my_gui():
 
         # INTERACTIVE PLOT COLUMN
         ip_col = [[sg.Frame(layout=[[sg.Checkbox('Show Map', enable_events=True, default=False,
-                                                 key='IP_SHOW_MAP')],
-                                    [sg.Text('X-axis --> MIN:'), sg.InputText('', size=(6,1), 
+                                                 key='IP_SHOW_MAP'),
+                                     sg.Button("- mins", key='IP_PREVIOUS'),
+                                     sg.Button("+ mins", key='IP_NEXT')],
+                                    [sg.Text('x-min'), sg.InputText('', size=(6,1), 
                                                                               key='IP_X_MIN'),
-                                     sg.Text('Max: '), sg.InputText('', size=(6,1), key='IP_X_MAX')],
-                                    [sg.Text('Y-axis --> MIN:'), sg.InputText('', size=(6,1),
+                                     sg.Text('x-max:'), sg.InputText('', size=(6,1), key='IP_X_MAX')],
+                                    [sg.Text('y-min:'), sg.InputText('', size=(6,1),
                                                                               key='IP_Y_MIN'),
-                                     sg.Text('Max: '), sg.InputText('', size=(6,1), key='IP_Y_MAX')],
-                                    [sg.Button("Apply Limits", enable_events=True, key='IP_APPLY_LIM')]], 
+                                     sg.Text('y-max:'), sg.InputText('', size=(6,1), key='IP_Y_MAX')],
+                                    ], 
                             title='Options', title_color='black', relief=sg.RELIEF_SUNKEN,
                             tooltip='Use these to set flags')],
                   [sg.Text('Interactive Plot', justification='center')],
                   [sg.Canvas(key="IP")],
-                  [sg.Button("PREVIOUS", key='IP_PREVIOUS'), sg.Button("NEXT", key='IP_NEXT')]]
+                  [sg.Button("Apply Limits", enable_events=True, key='IP_APPLY_LIM')]
+                  ]
 
         # TIME-SERIES-PLOT COLUMN
-        tsp_col = [[sg.Frame(layout=[[sg.Checkbox('Show Producer', enable_events=True,
-                                                  default=True, key='TSP_SHOW_PROD'), 
-                                      sg.Checkbox('Label Vehicles', enable_events=True,
+        tsp_col = [[sg.Frame(layout=[[sg.Checkbox('Producer', enable_events=True,
+                                                  default=True, key='TSP_SHOW_PROD'),
+                                     sg.Checkbox('Hypothetical SOC', enable_events=True,
+                                                  default=False, key='TSP_SHOW_FICTIVE')], 
+                                     [sg.Checkbox('Legends', enable_events=True,
+                                                  default=True, key='TSP_SHOW_LEGENDS'),
+                                      sg.Checkbox('Vehicle-Labels', enable_events=True,
                                                   default=False, key='TSP_LABEL_V')],
-                                     [sg.Checkbox('Show fictive SOC', enable_events=True,
-                                                  default=False, key='TSP_SHOW_FICTIVE'),
-                                      sg.Checkbox('Show cumm. Cons./Prod.', enable_events=True,
+                                      [sg.Checkbox('Total Consumption/Production', enable_events=True,
                                                   default=False, key='TSP_SHOW_E_NT')],
-                                      [sg.Checkbox('Show Legends', enable_events=True,
-                                                  default=True, key='TSP_SHOW_LEGENDS')],], 
+                                      ], 
                              title='Options', title_color='black', relief=sg.RELIEF_SUNKEN,
                              tooltip='Use these to set flags')],
                     [sg.Text('Time-Series Plot', justification='center')],
@@ -89,6 +93,9 @@ class my_gui():
         self.window['IP_X_MAX'].update('{:.3f}'.format(self.visuals.xlim[1]))
         self.window['IP_Y_MIN'].update('{:.3f}'.format(self.visuals.ylim[0]))
         self.window['IP_Y_MAX'].update('{:.3f}'.format(self.visuals.ylim[1]))
+        delta_in_mins = self.visuals.delta_t * 60
+        self.window['IP_PREVIOUS'].update('- {:.0f} mins'.format(delta_in_mins))
+        self.window['IP_NEXT'].update('+ {:.0f} mins'.format(delta_in_mins))
 
     def draw_ip_fig(self):
         '''

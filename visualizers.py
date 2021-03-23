@@ -582,7 +582,7 @@ class visuals:
         ax[v_ax].set_xticklabels(self.x_tick_str)
         ax[v_ax].set_title('Fahrzeuge für Energietransport', fontsize=15)
         ax[v_ax].set_ylim([-0.3*y_max,1.1*y_max])
-        #ax[v_ax].set_ylabel('SOC')
+        ax[v_ax].set_ylabel('SOC')
         ax[v_ax].yaxis.set_major_formatter(
                     mtick.PercentFormatter(1.0))
         if self.show_legends:
