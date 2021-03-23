@@ -2,10 +2,10 @@
 # initial settings #
 ####################
 t_0: '10:30'                    # initial clock time
-T: 1.5                         # [h]
+T: 1.0                          # [h]
 delta_t: 0.25                   # [h]
 c_init: 1.0                     # initial soc of nodes 
-p_init: 0.25                     # initial soc of producers
+p_init: 0.0                     # initial soc of producers
 vehicle_init: 0.1               # initial soc of vehicles 
 
 
@@ -25,7 +25,7 @@ other_dir: 'data/others'
 v_max: 40
 c_max: 100
 p_max: 100
-o_max: 100
+o_max: 0
 d_max: 1
 lat: [49.00, 49.90]     # min and max vals
 lon: [7.50, 7.90]
@@ -39,6 +39,7 @@ constr_j: True          # (1j) valid inequality
 min_vehicles: True      # toggle obj and constraints connected to z
 limit_vehicles: True    # (1l) limit charging vehicles at locations
 visualize: True         # visualize solution
+constrain_vehicles: 0   # only allow leq this many vehicles being used 
 
 ######################
 # Heuristic settings #

@@ -216,7 +216,8 @@ def get_profiles(nodes, peak, profiles, t_0, delta_t, t_steps):
         energy = profile['peak_percentage'].values * peak[n] * 0.25
         for t in range(t_steps):
             # set E to zero when charging is not possible
-            if t in [0, t_steps-2, t_steps-1]:
+            #if t in [0, t_steps-2, t_steps-1]:
+            if t in [t_steps-1]:
                 E_nt[n,t] = 0
                 continue
             t_dt = t_0_dt + timedelta(hours=t*delta_t)

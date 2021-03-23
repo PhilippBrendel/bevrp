@@ -25,6 +25,7 @@ class my_sk():
         self.min_vehicles = yaml_dict['min_vehicles']
         self.limit_vehicles = yaml_dict['limit_vehicles']
         self.visualize = yaml_dict['visualize']
+        self.constrain_vehicles = yaml_dict['constrain_vehicles']
         
         # initial settings
         self.t_0 = yaml_dict['t_0']
@@ -72,10 +73,11 @@ class my_sk():
         self.vehicle_data = get_vehicle_data(yaml_dict)
         self.vehicles = range(self.vehicle_data.shape[0])
 
-        self.instance_str = '{:02d}c_{:02d}p_{:03d}t_{:02d}v'.format(
+        self.instance_str = '{:02d}c_{:02d}p_{:03d}t_{:02d}of{:02d}v'.format(
             len(self.consumers),
             len(self.producers),
             self.t_steps-1,
+            self.constrain_vehicles,
             len(self.vehicles)
         )
         if os.path.exists(os.path.join('output', 
@@ -397,6 +399,11 @@ class my_sk():
         ###############
         if self.LogToConsole:      
             print('Adding constraints...')
+
+        
+        if self.constrain_vehicles is not None:
+            mod.addConstr(z_v.sum('*') <= self.constrain_vehicles)
+        
 
         # each vehicle can only be located 
         # at one node at each timestep
