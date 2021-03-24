@@ -1,0 +1,84 @@
+Solving problem for: 
+40 vehicles
+18 consumers
+6 producers
+1 depots
+0 other nodes
+12 timesteps with delta = 0.25 h
+objective: 0
+C init: 1.0
+P init: 0.0
+V init: 0.1
+
+Gurobi 9.1.1 (linux64) logging started Tue Mar 23 14:17:36 2021
+
+Changed value of parameter LogFile to output/18c_06p_012t_40of40v_log.txt
+   Prev:   Default: 
+Parameter LogToConsole unchanged
+   Value: 1  Min: 0  Max: 1  Default: 1
+Changed value of parameter threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Parameter method unchanged
+   Value: -1  Min: -1  Max: 5  Default: -1
+Parameter MIPFocus unchanged
+   Value: 0  Min: 0  Max: 3  Default: 0
+Parameter MIPGap unchanged
+   Value: 0.0001  Min: 0.0  Max: inf  Default: 0.0001
+Parameter CutPasses unchanged
+   Value: -1  Min: -1  Max: 2000000000  Default: -1
+Changed value of parameter TimeLimit to 100000.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.1 build v9.1.1rc0 (linux64)
+Thread count: 16 physical cores, 16 logical processors, using up to 1 threads
+Optimize a model with 22529 rows, 262486 columns and 1287944 nonzeros
+Model fingerprint: 0xb8f39cb7
+Variable types: 10446 continuous, 252040 integer (252040 binary)
+Coefficient statistics:
+  Matrix range     [1e-02, 5e+01]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 5e+02]
+  RHS range        [2e-01, 4e+01]
+Presolve removed 414 rows and 292 columns
+Presolve time: 2.56s
+Presolved: 22115 rows, 262194 columns, 1229290 nonzeros
+Variable types: 10234 continuous, 251960 integer (251920 binary)
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+    8868    1.9937288e-05   1.705248e+02   0.000000e+00      5s
+   11919    0.0000000e+00   0.000000e+00   0.000000e+00      9s
+
+Root relaxation: objective 0.000000e+00, 11919 iterations, 5.06 seconds
+Total elapsed time = 35.45s
+Total elapsed time = 44.58s
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0  810          -    0.00000      -     -   54s
+     0     0    0.00000    0 1352          -    0.00000      -     -  138s
+     0     0    0.00000    0 1306          -    0.00000      -     -  160s
+     0     0    0.00000    0 1365          -    0.00000      -     -  226s
+     0     0    0.00000    0 1393          -    0.00000      -     -  236s
+     0     0    0.00000    0 1383          -    0.00000      -     -  302s
+     0     0    0.00000    0 1420          -    0.00000      -     -  315s
+     0     0    0.00000    0 1460          -    0.00000      -     -  366s
+     0     0    0.00000    0 1460          -    0.00000      -     -  402s
+H    0     0                       0.0000000    0.00000  0.00%     -  526s
+     0     0    0.00000    0 1460    0.00000    0.00000  0.00%     -  526s
+
+Cutting planes:
+  Implied bound: 42
+  MIR: 187
+  Flow cover: 201
+  RLT: 2
+  Relax-and-lift: 4
+
+Explored 1 nodes (345736 simplex iterations) in 526.11 seconds
+Thread count was 1 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%

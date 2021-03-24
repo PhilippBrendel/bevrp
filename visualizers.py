@@ -63,12 +63,12 @@ class visuals:
         self.s_vt = c
         f_vnt_grb = d
         
-        self.x_vnt, self.f_vnt, v_list = preprocess_vars(
+        self.x_vnt, self.f_vnt, self.v_used = preprocess_vars(
                               self.w_vnmt, f_vnt_grb, 
                               self.vehicles, self.times, 
                               self.nodes)
-        v_names = [self.v_names[v] for v in v_list]
-        print(v_names)
+        v_names = [self.v_names[v] for v in self.v_used]
+        print('Used vehicles: ', v_names)
 
         x_min = np.min(self.x_values) 
         x_max = np.max(self.x_values)
@@ -102,11 +102,14 @@ class visuals:
        
 
         # setting for time_series_plot
+        self.tsp_show_producers = True
+        self.tsp_show_consumers = True
+        self.tsp_show_vehicles = True
         self.show_fictive_soc = True
-        self.show_producers = True
         self.label_vehicles = False
         self.cummulative_E_nt = False
         self.show_legends = True
+        self.tsp_show_unused_v = False 
         # Settings for interactive_plot
         self.show_map = False
         self.n_color = {'P': 'b', 
@@ -406,12 +409,36 @@ class visuals:
         Plot three different time series plots
         for producer, consumer and vehicles.
         '''
-        if self.show_producers:
-            v_ax = 2
-            fig, ax = plt.subplots(3)
+        if self.tsp_show_consumers:
+            c_ax = 0
+            if self.tsp_show_producers:
+                p_ax = 1
+                if self.tsp_show_vehicles:
+                    v_ax = 2
+                    fig, ax = plt.subplots(3)
+                else:
+                    fig, ax = plt.subplots(2)
+            else:
+                if self.tsp_show_vehicles:
+                    v_ax = 1
+                    fig, ax = plt.subplots(2)
+                else:
+                    fig, ax = plt.subplots(2)
         else:
-            v_ax = 1
-            fig, ax = plt.subplots(2)
+            if self.tsp_show_producers:
+                p_ax = 0
+                if self.tsp_show_vehicles:
+                    v_ax = 1
+                    fig, ax = plt.subplots(2)
+                else:
+                    fig, ax = plt.subplots(2)
+            else:
+                if self.tsp_show_vehicles:
+                    v_ax = 0
+                    fig, ax = plt.subplots(2)
+                else:
+                    fig, ax = plt.subplots(2)
+                    return fig
 
         p_color = 'b'
         p_color_2 = 'grey'
@@ -425,7 +452,7 @@ class visuals:
 
         for n in self.nodes:
             soc = np.zeros(self.t_steps)                 
-            if self.n_type[n] == 'C':
+            if self.n_type[n] == 'C' and self.tsp_show_consumers:
                 soc_fictive = np.zeros(self.t_steps)
                 soc_fictive[0] = self.s_nt[n,0]
                 for t in range(self.t_steps):
@@ -435,20 +462,20 @@ class visuals:
                     soc[t] = self.s_nt[n,t] #/ self.S_n_max[n]
                     cons[t] += self.E_nt[n,t] 
                 if len(S_c_max) == 0:
-                    ax[0].plot(soc,'{}-'.format(c_color), 
-                               label='mit SmartKrit')
+                    ax[c_ax].plot(soc,'{}-'.format(c_color), 
+                               label='SmartKrit [kWh]')
                     if self.show_fictive_soc:
-                        ax[0].plot(soc_fictive, '{}--'.format(
+                        ax[c_ax].plot(soc_fictive, '{}--'.format(
                                 'r'),
-                                label=('ohne SmartKrit')) 
+                                label=('no SmartKrit [kWh]')) 
                 else:
-                    ax[0].plot(soc,'{}-'.format(c_color))
+                    ax[c_ax].plot(soc,'{}-'.format(c_color))
                     if self.show_fictive_soc:
-                        ax[0].plot(soc_fictive, '{}--'.format(
+                        ax[c_ax].plot(soc_fictive, '{}--'.format(
                             'r'))
                 # S_c_max.append(max(np.max(soc),self.S_n_max[n]))
                 S_c_max.append(np.max(soc))
-            elif self.n_type[n] == 'P' and self.show_producers:
+            elif self.n_type[n] == 'P' and self.tsp_show_producers:
                 soc_fictive = np.zeros(self.t_steps)
                 soc_fictive[0] = self.s_nt[n,0]
                 for t in range(self.t_steps):
@@ -458,18 +485,17 @@ class visuals:
                     soc[t] = self.s_nt[n,t] #/ self.S_n_max[n]
                     prod[t] += self.E_nt[n,t]
                 if len(S_p_max) == 0:
-                    ax[1].plot(soc, '{}-'.format(
+                    ax[p_ax].plot(soc, '{}-'.format(
                                         self.n_color['P']), 
-                                        label='producers: s_nt')
+                                        label='SmartKrit [kWh]')
                     if self.show_fictive_soc:
-                        ax[1].plot(soc_fictive, '{}--'.format(
+                        ax[p_ax].plot(soc_fictive, '{}--'.format(
                                 self.n_color['P']),
-                                label=('s_nt without' + 
-                                        '\ncharging vehicles'))  
+                                label=('no SmartKrit [kWh]'))  
                 else:
-                    ax[1].plot(soc,'{}-'.format(self.n_color['P']))
+                    ax[p_ax].plot(soc,'{}-'.format(self.n_color['P']))
                     if self.show_fictive_soc:
-                        ax[1].plot(soc_fictive, '{}--'.format(
+                        ax[p_ax].plot(soc_fictive, '{}--'.format(
                             self.n_color['P']))
                 if self.show_fictive_soc:
                     soc_p_max = max(np.max(soc), np.max(soc_fictive))
@@ -478,8 +504,6 @@ class visuals:
                 # S_p_max.append(max(soc_p_max,self.S_n_max[n]))
                 S_p_max.append(np.max(soc_p_max))
 
-                
-        
 
         cons = cons[:-1]#/np.max(cons)
         prod = prod[:-1]#/np.max(prod)
@@ -494,63 +518,64 @@ class visuals:
 
         
         if self.cummulative_E_nt:
-            ax_01 = ax[0].twinx()
-            ax_01.hlines(cons, x_start, x_stop, c_color_2, 
-                        'dashed', 
-                        label='Total consumption\n(cumul. per h)')
-            ax_01.vlines(x_array,y_start_c,y_stop_c,c_color_2, 
-                        'dashed')
-            if self.show_producers:
-                ax_11 = ax[1].twinx()
+            if self.tsp_show_consumers:
+                ax_01 = ax[c_ax].twinx()
+                ax_01.hlines(cons, x_start, x_stop, c_color_2, 
+                            'dashed', 
+                            label=r'Total consumption [$\frac{kWh}{\Delta_{t}}$]')
+                ax_01.vlines(x_array,y_start_c,y_stop_c,c_color_2, 
+                            'dashed')
+            if self.tsp_show_producers:
+                ax_11 = ax[p_ax].twinx()
                 ax_11.hlines(prod,x_start,x_stop,p_color_2, 
                             'dashed', 
-                            label='Total production\n(cumul. per h)')
+                            label=r'Total production [$\frac{kWh}{\Delta_{t}}$]')
                 ax_11.vlines(x_array,y_start_p,y_stop_p,p_color_2, 
                             'dashed')
 
-        # Plot 1: consumers
-        ax[0].spines['left'].set_color(c_color)
-        ax[0].yaxis.label.set_color(c_color)
-        ax[0].tick_params(axis='y', colors=c_color)
-        ax[0].set_xticks(np.arange(0, self.t_steps, step=1))
-        ax[0].set_xticklabels(self.x_tick_str[::1])
-        ax[0].set_title('Energieversorgung Konsumenten', fontsize=15)
-        if self.show_fictive_soc:
-            ax[0].set_ylim([-1.5*max(S_c_max),1.1*max(S_c_max)])
-        else:
-            ax[0].set_ylim([-0.1*max(S_c_max),1.1*max(S_c_max)])
-        ax[0].set_ylabel('(kWh)')
-        if self.show_legends:
-            leg_0 = ax[0].legend(loc='upper left')
-            for text in leg_0.get_texts():
-                text.set_color('k')
-        ax[0].hlines(0, -1, self.t_steps+1, 'k', 
-                    'dashed',)
-        if self.cummulative_E_nt:
-            ax_01.spines['right'].set_color(c_color_2)
-            ax_01.yaxis.label.set_color(c_color_2)
-            ax_01.tick_params(axis='y', colors=c_color_2)
-            ax_01.set_ylim([-0.1*np.max(cons),1.1*np.max(cons)])
-            ax_01.set_ylabel('(kWh)')
+        if self.tsp_show_consumers:
+            # Plot 1: consumers
+            ax[c_ax].spines['left'].set_color(c_color)
+            ax[c_ax].yaxis.label.set_color(c_color)
+            ax[c_ax].tick_params(axis='y', colors=c_color)
+            ax[c_ax].set_xticks(np.arange(0, self.t_steps, step=1))
+            ax[c_ax].set_xticklabels(self.x_tick_str[::1])
+            ax[c_ax].set_title('Energy supply - Consumers', fontsize=15)
+            if self.show_fictive_soc:
+                ax[c_ax].set_ylim([-1.5*max(S_c_max),1.1*max(S_c_max)])
+            else:
+                ax[c_ax].set_ylim([-0.1*max(S_c_max),1.1*max(S_c_max)])
+            ax[c_ax].set_ylabel('(kWh)')
             if self.show_legends:
-                leg_01 = ax_01.legend(loc='upper right')
-                for text in leg_01.get_texts():
-                    text.set_color(c_color_2)
+                leg_0 = ax[c_ax].legend(loc='upper left')
+                for text in leg_0.get_texts():
+                    text.set_color('k')
+            ax[c_ax].hlines(0, -1, self.t_steps+1, 'k', 
+                        'dashed',)
+            if self.cummulative_E_nt:
+                ax_01.spines['right'].set_color(c_color_2)
+                ax_01.yaxis.label.set_color(c_color_2)
+                ax_01.tick_params(axis='y', colors=c_color_2)
+                ax_01.set_ylim([-0.1*np.max(cons),1.1*np.max(cons)])
+                if self.show_legends:
+                    leg_01 = ax_01.legend(loc='upper right')
+                    for text in leg_01.get_texts():
+                        text.set_color(c_color_2)
 
         
         # Plot 2: producers
-        if self.show_producers:
-            #ax[1].set_title('producer')
-            ax[1].set_xticks(np.arange(0, self.t_steps))
-            ax[1].set_xticklabels(self.x_tick_str)
-            ax[1].spines['left'].set_color(p_color)
-            ax[1].yaxis.label.set_color(p_color)
-            ax[1].tick_params(axis='y', colors=p_color)
-            ax[1].set_title('Energie Produzenten', fontsize=15)
-            ax[1].set_ylim([-0.1*max(S_p_max),1.1*max(S_p_max)])
-            ax[1].set_ylabel('(kWh)')
+        if self.tsp_show_producers:
+            #ax[p_ax].set_title('producer')
+            ax[p_ax].set_xticks(np.arange(0, self.t_steps))
+            ax[p_ax].set_xticklabels(self.x_tick_str)
+            ax[p_ax].spines['left'].set_color(p_color)
+            ax[p_ax].yaxis.label.set_color(p_color)
+            ax[p_ax].tick_params(axis='y', colors=p_color)
+            ax[p_ax].set_title('Energy production - Producers', fontsize=15)
+            ax[p_ax].set_ylim([-0.1*max(S_p_max),1.1*max(S_p_max)])
+            ax[p_ax].set_ylabel('(kWh)')
             if self.show_legends:
-                leg_1 = ax[1].legend(loc='upper left')
+                leg_1 = ax[p_ax].legend(loc='upper left')
                 for text in leg_1.get_texts():
                     text.set_color(p_color)
             
@@ -559,43 +584,49 @@ class visuals:
                 ax_11.yaxis.label.set_color(p_color_2)
                 ax_11.tick_params(axis='y', colors=p_color_2)
                 ax_11.set_ylim([-0.1*np.max(prod),1.1*np.max(prod)])
-                ax_11.set_ylabel('(kWh)')
                 if self.show_legends:
                     leg_11 = ax_11.legend(loc='upper right')
                     for text in leg_11.get_texts():
                         text.set_color(p_color_2)
 
 
-
-        # Plot 3: vehicles
-        max_soc = []
-        for v in self.vehicles:
-            array = np.zeros(self.t_steps)
-            for t in range(self.t_steps):
-                array[t] = self.s_vt[v,t] / self.S_v_max[v]
-            if self.label_vehicles:
-                ax[v_ax].plot(array, '--', label=self.v_names[v])
+        if self.tsp_show_vehicles:
+            # Plot 3: vehicles
+            max_soc = []
+            if self.tsp_show_unused_v:
+                v_list = self.vehicles
             else:
-                if len(max_soc) == 0:
-                    ax[v_ax].plot(array,'g-', label='Ladezustand')
-                else:
-                    ax[v_ax].plot(array,'g-')
-            max_soc.append(np.max(array))
+                v_list = self.v_used
 
-        y_max = max(max_soc)
-        ax[v_ax].set_xticks(np.arange(0, self.t_steps))
-        ax[v_ax].set_xticklabels(self.x_tick_str)
-        ax[v_ax].set_title('Fahrzeuge für Energietransport', fontsize=15)
-        ax[v_ax].set_ylim([-0.3*y_max,1.1*y_max])
-        ax[v_ax].set_ylabel('SOC')
-        ax[v_ax].yaxis.set_major_formatter(
-                    mtick.PercentFormatter(1.0))
-        if self.show_legends:
-            ax[v_ax].legend(loc='upper left')
-        ax[v_ax].hlines(0, -1, self.t_steps+1, 'k', 
-                    'dashed',)
+            for v in v_list:
+                array = np.zeros(self.t_steps)
+                for t in range(self.t_steps):
+                    array[t] = self.s_vt[v,t] / self.S_v_max[v]
+                if self.label_vehicles:
+                    ax[v_ax].plot(array, '--', label=self.v_names[v])
+                else:
+                    if len(max_soc) == 0:
+                        ax[v_ax].plot(array,'g-', label='SoC')
+                    else:
+                        ax[v_ax].plot(array,'g-')
+                max_soc.append(np.max(array))
+
+            y_max = max(max_soc)
+            ax[v_ax].set_xticks(np.arange(0, self.t_steps))
+            ax[v_ax].set_xticklabels(self.x_tick_str)
+            ax[v_ax].set_title('Energy transport - Vehicles', fontsize=15)
+            ax[v_ax].set_ylim([-0.3*y_max,1.1*y_max])
+            ax[v_ax].set_ylabel('SOC')
+            ax[v_ax].yaxis.set_major_formatter(
+                        mtick.PercentFormatter(1.0))
+            if self.show_legends:
+                ax[v_ax].legend(loc='upper left')
+            ax[v_ax].hlines(0, -1, self.t_steps+1, 'k', 
+                        'dashed',)
+        
         plt.subplots_adjust(hspace=0.5)
         #plt.draw()     
+        
         return fig
 
 

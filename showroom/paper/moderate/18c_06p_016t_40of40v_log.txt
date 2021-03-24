@@ -1,0 +1,96 @@
+Solving problem for: 
+40 vehicles
+18 consumers
+6 producers
+1 depots
+0 other nodes
+16 timesteps with delta = 0.25 h
+objective: 0
+C init: 1.0
+P init: 0.0
+V init: 0.1
+
+Gurobi 9.1.1 (linux64) logging started Tue Mar 23 14:17:48 2021
+
+Changed value of parameter LogFile to output/18c_06p_016t_40of40v_log.txt
+   Prev:   Default: 
+Parameter LogToConsole unchanged
+   Value: 1  Min: 0  Max: 1  Default: 1
+Changed value of parameter threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Parameter method unchanged
+   Value: -1  Min: -1  Max: 5  Default: -1
+Parameter MIPFocus unchanged
+   Value: 0  Min: 0  Max: 3  Default: 0
+Parameter MIPGap unchanged
+   Value: 0.0001  Min: 0.0  Max: inf  Default: 0.0001
+Parameter CutPasses unchanged
+   Value: -1  Min: -1  Max: 2000000000  Default: -1
+Changed value of parameter TimeLimit to 100000.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.1 build v9.1.1rc0 (linux64)
+Thread count: 16 physical cores, 16 logical processors, using up to 1 threads
+Optimize a model with 31041 rows, 366606 columns and 1800640 nonzeros
+Model fingerprint: 0x7eecd772
+Variable types: 14566 continuous, 352040 integer (352040 binary)
+Coefficient statistics:
+  Matrix range     [1e-02, 5e+01]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 5e+02]
+  RHS range        [2e-01, 4e+01]
+Presolve removed 490 rows and 316 columns
+Presolve time: 3.35s
+Presolved: 30551 rows, 366290 columns, 1738922 nonzeros
+Variable types: 14330 continuous, 351960 integer (351920 binary)
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.146874e+03   0.000000e+00      5s
+   12838    3.3294021e-05   2.754535e+02   0.000000e+00     10s
+   17598    3.7232925e-05   1.905327e+02   0.000000e+00     15s
+   19010    3.9871054e-05   2.320105e+01   0.000000e+00     20s
+   20365    4.0676004e-05   6.565179e-01   0.000000e+00     25s
+   20524    0.0000000e+00   0.000000e+00   0.000000e+00     26s
+
+Root relaxation: objective 0.000000e+00, 20524 iterations, 21.59 seconds
+Total elapsed time = 110.82s
+Total elapsed time = 147.86s
+Total elapsed time = 253.10s
+Total elapsed time = 311.72s
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0  919          -    0.00000      -     -  350s
+     0     0    0.00000    0 1446          -    0.00000      -     -  534s
+     0     0    0.00000    0 1596          -    0.00000      -     -  603s
+     0     0    0.00000    0  408          -    0.00000      -     -  987s
+     0     0    0.00000    0  470          -    0.00000      -     -  993s
+     0     0    0.00000    0  327          -    0.00000      -     - 1295s
+     0     0    0.00000    0  451          -    0.00000      -     - 1398s
+     0     0    0.00000    0  361          -    0.00000      -     - 1599s
+     0     0    0.00000    0  518          -    0.00000      -     - 1614s
+     0     0    0.00000    0  323          -    0.00000      -     - 1842s
+     0     0    0.00000    0  528          -    0.00000      -     - 1858s
+     0     0    0.00000    0  354          -    0.00000      -     - 1957s
+     0     0    0.00000    0  558          -    0.00000      -     - 1973s
+     0     0    0.00000    0  761          -    0.00000      -     - 2153s
+     0     0    0.00000    0  305          -    0.00000      -     - 2359s
+H    0     0                       0.0000000    0.00000  0.00%     - 2642s
+     0     0    0.00000    0  305    0.00000    0.00000  0.00%     - 2642s
+
+Cutting planes:
+  Implied bound: 25
+  MIR: 50
+  Flow cover: 113
+  RLT: 2
+  Relax-and-lift: 2
+
+Explored 1 nodes (1754941 simplex iterations) in 2642.37 seconds
+Thread count was 1 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%

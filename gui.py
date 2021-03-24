@@ -41,16 +41,23 @@ class my_gui():
                   ]
 
         # TIME-SERIES-PLOT COLUMN
-        tsp_col = [[sg.Frame(layout=[[sg.Checkbox('Producer', enable_events=True,
+        tsp_col = [[sg.Frame(layout=[[sg.Checkbox('Consumer', enable_events=True,
+                                                  default=True, key='TSP_SHOW_CONS'),
+                                        sg.Checkbox('Producer', enable_events=True,
                                                   default=True, key='TSP_SHOW_PROD'),
-                                     sg.Checkbox('Hypothetical SOC', enable_events=True,
-                                                  default=False, key='TSP_SHOW_FICTIVE')], 
+                                        sg.Checkbox('Vehicles', enable_events=True,
+                                                  default=True, key='TSP_SHOW_V')],
+                                     [sg.Checkbox('Energy - no SmartKrit', enable_events=True,
+                                                  default=False, key='TSP_SHOW_FICTIVE'),
+                                        sg.Checkbox('Total Energy', enable_events=True,
+                                                    default=False, key='TSP_SHOW_E_NT')], 
                                      [sg.Checkbox('Legends', enable_events=True,
-                                                  default=True, key='TSP_SHOW_LEGENDS'),
-                                      sg.Checkbox('Vehicle-Labels', enable_events=True,
-                                                  default=False, key='TSP_LABEL_V')],
-                                      [sg.Checkbox('Total Consumption/Production', enable_events=True,
-                                                  default=False, key='TSP_SHOW_E_NT')],
+                                                  default=True, key='TSP_SHOW_LEGENDS')],
+                                     [sg.Checkbox('Unique Vehicles', enable_events=True,
+                                                    default=False, key='TSP_LABEL_V'),
+                                        sg.Checkbox('Unused Vehicles', enable_events=True,
+                                                    default=False, key='TSP_UNUSED_V')],
+                                        
                                       ], 
                              title='Options', title_color='black', relief=sg.RELIEF_SUNKEN,
                              tooltip='Use these to set flags')],
@@ -88,7 +95,7 @@ class my_gui():
         self.visuals.cummulative_E_nt = False
         self.ip_fig = self.visuals.interactive_plot(from_gui=True)
         self.tsp_fig = self.visuals.time_series_plots()
-        # write values
+        # write/reset values
         self.window['IP_X_MIN'].update('{:.3f}'.format(self.visuals.xlim[0]))
         self.window['IP_X_MAX'].update('{:.3f}'.format(self.visuals.xlim[1]))
         self.window['IP_Y_MIN'].update('{:.3f}'.format(self.visuals.ylim[0]))
@@ -125,8 +132,7 @@ class my_gui():
     def run(self):
         while True:
             event, values = self.window.read()
-            print(event)
-            #print(values['IP_SHOW_MAP'])
+            #print(event)
             if event == "EXIT" or event == sg.WIN_CLOSED:
                 break
             if event == 'FOLDER': # folder was chosen
@@ -171,12 +177,18 @@ class my_gui():
                 self.ip_fig = self.visuals.update_plot(from_gui=True)
                 self.draw_ip_fig()
             elif event.startswith('TSP'):
-                if event == 'TSP_SHOW_FICTIVE':
+                if event == 'TSP_SHOW_PROD':
+                    self.visuals.tsp_show_producers = values['TSP_SHOW_PROD']
+                elif event == 'TSP_SHOW_CONS':
+                    self.visuals.tsp_show_consumers = values['TSP_SHOW_CONS']
+                elif event == 'TSP_SHOW_V':
+                    self.visuals.tsp_show_vehicles = values['TSP_SHOW_V']
+                elif event == 'TSP_SHOW_FICTIVE':
                     self.visuals.show_fictive_soc = values['TSP_SHOW_FICTIVE']
-                elif event == 'TSP_SHOW_PROD':
-                    self.visuals.show_producers = values['TSP_SHOW_PROD']
                 elif event == 'TSP_LABEL_V':
                     self.visuals.label_vehicles = values['TSP_LABEL_V']
+                elif event == 'TSP_UNUSED_V':
+                    self.visuals.tsp_show_unused_v = values['TSP_UNUSED_V']
                 elif event == 'TSP_SHOW_E_NT':
                     self.visuals.cummulative_E_nt = values['TSP_SHOW_E_NT']
                 elif event == 'TSP_SHOW_LEGENDS':
@@ -191,7 +203,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
                         description='Visualize a specific file.')
     parser.add_argument('-d', '--directory', 
-                        dest='dir', default='D:/projects/MA_YRC/bevrp/showroom/obj0', 
+                        dest='dir', default='D:/projects/MA_YRC/bevrp/showroom/paper', 
                         help='Default result directory')
     args = parser.parse_args()
     gui = my_gui(args.dir)
