@@ -68,7 +68,7 @@ class visuals:
                               self.vehicles, self.times, 
                               self.nodes)
         v_names = [self.v_names[v] for v in self.v_used]
-        print('Used vehicles: ', v_names)
+        print('{} used vehicles: {}'.format(len(v_names), v_names))
 
         x_min = np.min(self.x_values) 
         x_max = np.max(self.x_values)
