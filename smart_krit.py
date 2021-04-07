@@ -73,11 +73,15 @@ class my_sk():
         self.vehicle_data = get_vehicle_data(yaml_dict)
         self.vehicles = range(self.vehicle_data.shape[0])
 
-        self.instance_str = '{:02d}c_{:02d}p_{:03d}t_{:02d}of{:02d}v'.format(
+        if self.constrain_vehicles is None:
+            inter_str = ''
+        else:
+            inter_str = '{:02d}of'.format(self.constrain_vehicles)
+        self.instance_str = '{:02d}c_{:02d}p_{:03d}t_{}{:02d}v'.format(
             len(self.consumers),
             len(self.producers),
             self.t_steps-1,
-            self.constrain_vehicles,
+            inter_str,
             len(self.vehicles)
         )
         if os.path.exists(os.path.join('output', 
