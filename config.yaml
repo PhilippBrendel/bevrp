@@ -34,12 +34,12 @@ lon: [7.50, 7.90]
 ##################
 # Model settings #
 ##################
-objective: 0
+objective: 1
 constr_j: True          # (1j) valid inequality
 min_vehicles: True      # toggle obj and constraints connected to z
 limit_vehicles: True    # (1l) limit charging vehicles at locations
 visualize: True         # visualize solution
-constrain_vehicles: 0   # only allow leq this many vehicles being used 
+constrain_vehicles:   # only allow leq this many vehicles being used 
 
 ######################
 # Heuristic settings #

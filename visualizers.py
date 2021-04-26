@@ -111,7 +111,8 @@ class visuals:
         self.show_legends = True
         self.tsp_show_unused_v = False 
         # Settings for interactive_plot
-        self.show_map = False
+        self.ip_show_map = False
+        self.ip_show_unused_v = False
         self.n_color = {'P': 'b', 
                         'C': 'r', 
                         'D': 'k',
@@ -214,19 +215,22 @@ class visuals:
         vis = self.annot.get_visible()
         if event.inaxes == self.ax:
             for v in self.vehicles:
-                node_type = self.n_type[self.v_node[v]]
-                if not self.show_vehicles[node_type]:
-                    cont = False
-                else:
-                    cont, ind = self.v_circle[v].contains(event)
-                if cont:
-                    self.update_annot_v(v, node_type)
-                    self.annot.set_visible(True)
-                    self.fig.canvas.draw_idle()
-                else:
-                    if vis:
-                        self.annot.set_visible(False)
+                if v in self.v_used or self.ip_show_unused_v:
+                    node_type = self.n_type[self.v_node[v]]
+                    if not self.show_vehicles[node_type]:
+                        cont = False
+                    else:
+                        cont, ind = self.v_circle[v].contains(event)
+                    if cont:
+                        self.update_annot_v(v, node_type)
+                        self.annot.set_visible(True)
                         self.fig.canvas.draw_idle()
+                    else:
+                        if vis:
+                            self.annot.set_visible(False)
+                            self.fig.canvas.draw_idle()
+                else:
+                    pass
             for n in self.nodes:
                 cont, ind = self.n_circle[n].contains(event)
                 if cont:
@@ -293,6 +297,7 @@ class visuals:
     def update_plot(self, from_gui=False):
         '''
         Called initially and when either next or prev is clicked.
+
         '''
         t = self.t_ind
         self.ax.set_xlim(self.xlim)
@@ -307,7 +312,7 @@ class visuals:
         # u"\u25CF"
         self.ax.set_title('{}\n{}\n'.format(self.title_str[t], prog_bar), fontsize=15)
 
-        if self.show_map:
+        if self.ip_show_map:
             img = plt.imread("images/osm_KL.png")
             self.ax.imshow(img, extent=[7.6516, 7.8935, 
                                         49.4042, 49.5075])
@@ -338,7 +343,8 @@ class visuals:
             v_list = []
             for v in self.vehicles:
                 if self.x_vnt[v, n, t] == 1:
-                    v_list.append(v)
+                    if v in self.v_used or self.ip_show_unused_v:
+                        v_list.append(v)
                     self.v_node[v] = n
 
             # calculate vehicle rectangles for this node

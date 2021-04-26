@@ -159,7 +159,7 @@ class my_gui():
                     if self.visuals.t_ind  < self.visuals.t_steps - 1:
                         self.visuals.t_ind += 1
                 elif event == 'IP_SHOW_MAP':
-                    self.visuals.show_map = values['IP_SHOW_MAP']
+                    self.visuals.ip_show_map = values['IP_SHOW_MAP']
                 elif event == 'IP_APPLY_LIM':
                     update = True
                     try:
