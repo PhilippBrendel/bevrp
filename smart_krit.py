@@ -551,10 +551,22 @@ if __name__ == "__main__":
     parser.add_argument('-c', '--config', 
                         dest='config', default='config.yaml', 
                         help='Config file to be used')
+    parser.add_argument('-w', '--warmstart', 
+                        dest='warmstart', default=None, 
+                        help='File for warm-start results')
     args = parser.parse_args()
 
     # solve model with parsed config-file 
     sk = my_sk(args.config)
     sk.preprocess()
-    grb_mod = sk.solve()
+    if args.warmstart is None:
+        grb_mod = sk.solve()
+    else:
+        if os.path.exists(args.warmstart):
+            w, s_n, s_v, f = read_results(args.warmstart)
+            grb_mod = sk.solve(w_start=w, s_n_start=s_n, s_v_start=s_v,
+                               f_start=f)
+        else:
+            exit(f'warmstart-file {args.warmstart} does not exist!')
+
     sk.postprocess(grb_mod)

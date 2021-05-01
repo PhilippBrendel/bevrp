@@ -506,7 +506,7 @@ def findTriplets(lst, costs, key):
 ###########
 # VISUALS #
 ###########
-def read_results(out_file, s_n0, s_v0, nodes, vehicles):
+def read_results(out_file, s_n0=None, s_v0=None, nodes=None, vehicles=None):
     '''
     Read results obtained by gurobi and 
     return them as dictionaries for further use.
@@ -555,11 +555,15 @@ def read_results(out_file, s_n0, s_v0, nodes, vehicles):
                                                   '').split(',')
             w_vnmt[int(ind[0]), int(ind[1]), 
                    int(ind[2]), int(ind[3])] = val
-
-    for n in nodes:
-        s_nt[n,0] = s_n0[n]
-    for v in vehicles:
-        s_vt[v,0] = s_v0[v]
+    
+    if nodes is not None:
+        for n in nodes:
+            if s_n0 is not None:
+                s_nt[n,0] = s_n0[n]
+    if vehicles is not None:
+        for v in vehicles:
+            if s_v0 is not None:
+                s_vt[v,0] = s_v0[v]
     
     return w_vnmt, s_nt, s_vt, f_vnt
 
