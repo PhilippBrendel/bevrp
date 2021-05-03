@@ -55,9 +55,9 @@ class visuals:
         self.s_n0 = model_dict['s_n0']
         self.s_v0 = model_dict['s_v0']    
 
-        a,b,c,d = read_results(out_file, self.s_n0, 
-                               self.s_v0, self.nodes, 
-                               self.vehicles)
+        a,b,c,d,e,f = read_results(out_file, self.s_n0, 
+                                   self.s_v0, self.nodes, 
+                                   self.vehicles)
         self.w_vnmt = a
         self.s_nt = b 
         self.s_vt = c

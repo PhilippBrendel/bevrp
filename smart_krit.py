@@ -240,6 +240,8 @@ class my_sk():
                         for t in self.times[1:]]
         sets['s_nt'] = [(n, t) for n in self.N_pc 
                         for t in self.times[1:]]
+        sets['e_nt'] = [(n, t) for n in self.producers 
+                        for t in self.times]
 
         self.U_vnm = {}
         self.P_vn = {}
@@ -281,8 +283,8 @@ class my_sk():
         self.sets = sets
 
 
-    def solve(self, f_start=None, w_start=None, 
-              s_n_start=None, s_v_start=None, f_fix=None):
+    def solve(self, f_start=None, w_start=None, s_n_start=None, s_v_start=None,
+              z_start=None, e_start=None, f_fix=None):
         '''
         Solve the model with Gurobi.
 
@@ -332,39 +334,59 @@ class my_sk():
                            ub = [self.S_n_max[n] 
                                  for (n,t) in sets['s_nt']], 
                            name="s_nt")
-        e_nt = mod.addVars([(n, t) for n in self.producers 
-                           for t in self.times], 
+        e_nt = mod.addVars(sets['e_nt'], 
                            lb = 0.0, name="e_nt")
         # vehicles used (only if required)
         if self.min_vehicles:
             z_v = mod.addVars(self.vehicles, vtype=GRB.BINARY, 
                               name="z_v")
 
+        warm_starts = 0
         # if available: use warm-start
         if not(f_start is None):
             for (v,n,t) in sets['f']:
                 try:
                     f_vnt[v,n,t].start = f_start[v,n,t]
+                    warm_starts += 1
                 except KeyError:
                     pass   
         if not(w_start is None):
             for (v,n,m,t) in sets['w']:
                 try: 
                     w_vnmt[v,n,m,t].start = w_start[v,n,m,t]
+                    warm_starts += 1
                 except KeyError:
                     pass
         if not(s_n_start is None):
             for (n,t) in sets['s_nt']:
                 try: 
                     s_nt[n,t].start = s_n_start[n,t]
+                    warm_starts += 1
                 except KeyError:
                     pass
         if not(s_v_start is None):
             for (v,t) in sets['s_vt']:
                 try: 
                     s_vt[v,t].start = s_v_start[v,t]
+                    warm_starts += 1
                 except KeyError:
                     pass
+        if z_start is not None and self.min_vehicles:
+            for v in self.vehicles:
+                try: 
+                    z_v[v].start = z_start[v]
+                    warm_starts += 1
+                except KeyError:
+                    pass
+        if e_start is not None:
+            for (n,t) in sets['e_nt']:
+                try: 
+                    e_nt[n,t].start = e_start[n,t]
+                    warm_starts += 1
+                except KeyError:
+                    pass
+
+        print(f'Applied {warm_starts} warmstarts...\n')
 
         # if available: fix values of f
         if not (f_fix is None):
@@ -563,9 +585,9 @@ if __name__ == "__main__":
         grb_mod = sk.solve()
     else:
         if os.path.exists(args.warmstart):
-            w, s_n, s_v, f = read_results(args.warmstart)
+            w, s_n, s_v, f, z, e = read_results(args.warmstart)
             grb_mod = sk.solve(w_start=w, s_n_start=s_n, s_v_start=s_v,
-                               f_start=f)
+                               f_start=f, z_start=z, e_start=e)
         else:
             exit(f'warmstart-file {args.warmstart} does not exist!')
 

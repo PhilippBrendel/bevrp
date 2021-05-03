@@ -531,31 +531,50 @@ def read_results(out_file, s_n0=None, s_v0=None, nodes=None, vehicles=None):
     s_vt = {}
     f_vnt = {}
     w_vnmt = {}
+    z_v = {}
+    e_nt = {}
 
     with open(out_file, 'r') as my_file:
         lines = my_file.readlines()
 
+    counter = 0
     for line in lines:
         var, val = line.split(' ')
         val = float(val)
-        if var[:4] == 's_nt':
+        if var[:3] == 'z_v':
+            counter += 1
+            ind = var[3:].replace('[','').replace(']',
+                                                  '').split(',')
+            z_v[int(ind[0])] = val
+        if var[:4] == 'e_nt':
+            counter += 1
+            ind = var[4:].replace('[','').replace(']',
+                                                  '').split(',')
+            e_nt[int(ind[0]),int(ind[1])] = val
+        elif var[:4] == 's_nt':
+            counter += 1
             ind = var[4:].replace('[','').replace(']',
                                                   '').split(',')
             s_nt[int(ind[0]),int(ind[1])] = val
         elif var[:4] == 's_vt':
+            counter += 1
             ind = var[4:].replace('[','').replace(']',
                                                   '').split(',')
             s_vt[int(ind[0]),int(ind[1])] = val
         elif var[:5] == 'f_vnt':
+            counter += 1
             ind = var[5:].replace('[','').replace(']',
                                                   '').split(',')
             f_vnt[int(ind[0]), int(ind[1]), int(ind[2])] = val
         elif var[:6] == 'w_vnmt':
+            counter += 1
             ind = var[6:].replace('[','').replace(']',
                                                   '').split(',')
             w_vnmt[int(ind[0]), int(ind[1]), 
                    int(ind[2]), int(ind[3])] = val
-    
+
+    print(f'\nRead {counter} values from {out_file}...\n')
+
     if nodes is not None:
         for n in nodes:
             if s_n0 is not None:
@@ -565,7 +584,7 @@ def read_results(out_file, s_n0=None, s_v0=None, nodes=None, vehicles=None):
             if s_v0 is not None:
                 s_vt[v,0] = s_v0[v]
     
-    return w_vnmt, s_nt, s_vt, f_vnt
+    return w_vnmt, s_nt, s_vt, f_vnt, z_v, e_nt
 
 
 def preprocess_vars(w, f_grb, vehicles, times, nodes):
