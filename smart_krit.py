@@ -310,6 +310,11 @@ class my_sk():
         mod.Params.MIPFocus = self.MIPFocus
         mod.Params.MIPGap = self.MIPGap
         mod.Params.CutPasses = self.CutPasses
+        #
+        mod.Params.OptimalityTol = 1e-6
+        mod.Params.FeasibilityTol = 1e-6
+        mod.Params.IntFeasTol = 1e-5
+        #
         if not self.TimeLimit is None:
             mod.Params.TimeLimit = self.TimeLimit 
 
