@@ -311,9 +311,9 @@ class my_sk():
         mod.Params.MIPGap = self.MIPGap
         mod.Params.CutPasses = self.CutPasses
         #
-        mod.Params.OptimalityTol = 1e-6
-        mod.Params.FeasibilityTol = 1e-6
-        mod.Params.IntFeasTol = 1e-5
+        mod.Params.OptimalityTol = 1e-3
+        mod.Params.FeasibilityTol = 1e-3
+        mod.Params.IntFeasTol = 1e-3
         #
         if not self.TimeLimit is None:
             mod.Params.TimeLimit = self.TimeLimit 
@@ -515,6 +515,7 @@ class my_sk():
 
         # Optimize model
         mod.optimize()
+        mod.printQuality()
 
         return mod
 
