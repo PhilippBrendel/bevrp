@@ -23,8 +23,8 @@ other_dir: 'data/others'
 # Data restrictions #
 #####################
 v_max: 40
-c_max: 100
-p_max: 100
+c_max: 1
+p_max: 1
 o_max: 0
 d_max: 1
 lat: [49.00, 49.90]     # min and max vals
