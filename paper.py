@@ -19,15 +19,20 @@ else:
     print('Unknown platform!')
     exit()
 
-# logging
-# TODO:
 
+# Set up logging
+if not os.path.exists('output'):
+    os.mkdir('output')
+logger = setup_logger('logger',
+                        os.path.join('output', "my_log.log"),
+                        formatter=['%(asctime)s:%(message)s',
+                                    '%H:%M:%S'])
 
 for config in configs:
     with open(config) as config_file:
         yaml_dict = yaml.load(config_file,
                               Loader=yaml.FullLoader)
-    print(f'Config file: {config}')
+    logger.info(f'Config file: {config}')
 
     for t in [2.0, 3.0, 4.0, 5.0, 10.0]:
         # Part B: objective 0
@@ -36,7 +41,7 @@ for config in configs:
         best_limit = None
         best_res = None
         for v_limit in [40, 30, 20, 15, 10, 5, 4, 3, 2, 1]:
-            print(f'Limit: {v_limit}')
+            logger.info(f'Limit: {v_limit}')
             yaml_dict['constrain_vehicles'] = v_limit
             sk = my_sk(yaml_dict)
             sk.preprocess()
@@ -47,11 +52,11 @@ for config in configs:
             if grb_mod.status == 2:
                 best_limit = v_limit
                 best_res = sk.instance_str + '.txt'
-                print('Feasible')
+                logger.info('Feasible')
             else:
-                print('Infeasible')
+                logger.info('Infeasible')
         
-        print(f'Finished part B: Best Limit: {v_limit} in file {best_res}')
+        logger.info(f'Finished part B: Best Limit: {v_limit} in file {best_res}')
         #exit()
 
         # Part C: warm-start with remaining time

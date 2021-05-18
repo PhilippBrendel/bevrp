@@ -52,7 +52,7 @@ h_init: quick           # [quick, greedy]
 ###################
 # Gurobi settings #
 ###################
-TimeLimit: 100000
+TimeLimit: 1800
 threads: 1
 # multiple threads for parallel work
 # can be restricted in order to save RAM

@@ -4,7 +4,9 @@ import pandas as pd
 from datetime import datetime, timedelta
 import glob
 import os
-from itertools import combinations 
+from itertools import combinations
+import logging
+import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -51,6 +53,49 @@ def read_variables(grb_mod):
             s_vt[int(ind[0]), int(ind[1])] = float(v.x)
 
     return f_vnt, w_vnmt, s_nt, s_vt
+
+
+def setup_logger(name, log_file, level=logging.INFO,
+                 formatter='%(message)s', stdout=True):
+    """
+    Setup a logger and return it.
+
+    Args:
+        - name (str): name of logger
+        - logfile (str): path to desired logfile
+        - level (logging.XXX): min level of logs to be included
+        - formatter (str): format of logged messages
+        - stdout (bool): whether to print to sys.stdout as well
+    Returns:
+        - logger : instance of logging.getLogger()
+    """
+    if isinstance(formatter, list):
+        formatter = logging.Formatter(formatter[0], formatter[1])
+    elif isinstance(formatter, str):
+        formatter = logging.Formatter(formatter)
+
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setFormatter(formatter)
+
+    if os.path.exists(log_file):
+        handler = logging.FileHandler(log_file, mode='w')
+    else:
+        handler = logging.FileHandler(log_file, mode='w')
+
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+
+    if (logger.hasHandlers()):
+        logger.handlers.clear()
+
+    logger.addHandler(handler)
+
+    if stdout:
+        logger.addHandler(stdout_handler)
+
+    return logger
 
 
 ##############
