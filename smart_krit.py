@@ -9,15 +9,22 @@ import argparse
 
 class my_sk():
     def __init__(self, config):
+        '''
+        config: path to YAML or yaml_dict
+        '''
         # create output folder and read config
         if not os.path.exists('output'):
             os.makedirs('output')
         self.time_str = datetime.now().strftime("%m_%d-%H_%M_%S")
-        with open(config) as config_file:
-            yaml_dict = yaml.load(config_file, 
-                                  Loader=yaml.FullLoader)
-        base_name = os.path.basename(config)
-        self.instance_name = os.path.splitext(base_name)[0]
+        
+        if isinstance(config, str):
+            with open(config) as config_file:
+                yaml_dict = yaml.load(config_file, 
+                                    Loader=yaml.FullLoader)
+            # base_name = os.path.basename(config)
+            # self.instance_name = os.path.splitext(base_name)[0]
+        elif isinstance(config, dict):
+            yaml_dict = config
 
         # model settings
         self.obj = yaml_dict['objective']

@@ -11,7 +11,7 @@ class greedy2():
         self.sk = my_sk(config) 
         self.logfile = os.path.join('output', 
                                     self.sk.time_str+'_hlog.txt')
-        log_str = 'Instance: {}'.format(self.sk.instance_name)
+        log_str = 'Instance: {}'.format(self.sk.instance_str)
         log_str += '\nProblem parameters: \n{} vehicles'.format(
                     len(range(self.sk.vehicle_data.shape[0])))
         log_str += '\n{} consumers\n{} producers'.format(
