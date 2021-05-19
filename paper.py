@@ -35,6 +35,7 @@ for config in configs:
     logger.info(f'Config file: {config}')
 
     for t in [2.0, 3.0, 4.0, 5.0, 10.0]:
+        start_time = time.time()
         # Part B: objective 0
         yaml_dict['objective'] = 0
         yaml_dict['T'] = t
@@ -57,11 +58,14 @@ for config in configs:
                 logger.info('Infeasible')
         
         logger.info(f'Finished part B: Best Limit: {v_limit} in file {best_res}')
-        #exit()
 
         # Part C: warm-start with remaining time
         yaml_dict['constrain_vehicles'] = best_limit
         yaml_dict['objective'] = 1
+        time_passed = time.time - start_time
+        time_left = 86400 - time_passed
+        yaml_dict['TimeLimit'] = time_left
+        logger.info(f'Using remaining {} s with warm_start')
         sk = my_sk(yaml_dict)
         sk.preprocess()
         w, s_n, s_v, f, z, e = read_results(os.path.join('output', best_res))
@@ -69,4 +73,5 @@ for config in configs:
                            f_start=f, z_start=z, e_start=e)
         sk.postprocess(grb_mod)
 
-    exit()
+
+

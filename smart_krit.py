@@ -522,7 +522,8 @@ class my_sk():
 
         # Optimize model
         mod.optimize()
-        mod.printQuality()
+        if mod.status == 2: 
+            mod.printQuality()
 
         return mod
 
