@@ -1,0 +1,80 @@
+Solving problem for: 
+40 vehicles
+5 consumers
+6 producers
+1 depots
+0 other nodes
+8 timesteps with delta = 0.25 h
+objective: 0
+C init: 1.0
+P init: 0.0
+V init: 0.1
+
+Gurobi 9.1.1 (linux64) logging started Tue Mar 23 14:57:27 2021
+
+Changed value of parameter LogFile to output/05c_06p_008t_40of40v_log.txt
+   Prev:   Default: 
+Parameter LogToConsole unchanged
+   Value: 1  Min: 0  Max: 1  Default: 1
+Changed value of parameter threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Parameter method unchanged
+   Value: -1  Min: -1  Max: 5  Default: -1
+Parameter MIPFocus unchanged
+   Value: 0  Min: 0  Max: 3  Default: 0
+Parameter MIPGap unchanged
+   Value: 0.0001  Min: 0.0  Max: inf  Default: 0.0001
+Parameter CutPasses unchanged
+   Value: -1  Min: -1  Max: 2000000000  Default: -1
+Changed value of parameter TimeLimit to 100000.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.1 build v9.1.1rc0 (linux64)
+Thread count: 16 physical cores, 16 logical processors, using up to 1 threads
+Optimize a model with 7075 rows, 38662 columns and 189213 nonzeros
+Model fingerprint: 0x7dabea39
+Variable types: 3102 continuous, 35560 integer (35560 binary)
+Coefficient statistics:
+  Matrix range     [1e-02, 5e+01]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 5e+02]
+  RHS range        [1e+00, 1e+02]
+Presolve removed 166 rows and 242 columns
+Presolve time: 0.23s
+Presolved: 6909 rows, 38420 columns, 186003 nonzeros
+Variable types: 2940 continuous, 35480 integer (35440 binary)
+
+Root relaxation: objective 0.000000e+00, 3949 iterations, 0.50 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0  435          -    0.00000      -     -    1s
+     0     0    0.00000    0  486          -    0.00000      -     -    2s
+     0     0    0.00000    0  382          -    0.00000      -     -    5s
+     0     0    0.00000    0   37          -    0.00000      -     -    7s
+     0     0    0.00000    0   40          -    0.00000      -     -    7s
+     0     0    0.00000    0   54          -    0.00000      -     -    7s
+     0     0    0.00000    0   54          -    0.00000      -     -    7s
+     0     0    0.00000    0   30          -    0.00000      -     -    8s
+     0     0    0.00000    0   41          -    0.00000      -     -    8s
+     0     0    0.00000    0   33          -    0.00000      -     -    9s
+H    0     0                       0.0000000    0.00000  0.00%     -    9s
+     0     0    0.00000    0   33    0.00000    0.00000  0.00%     -    9s
+
+Cutting planes:
+  Gomory: 14
+  Cover: 1
+  Implied bound: 24
+  Clique: 1
+  MIR: 6
+  Flow cover: 18
+  RLT: 9
+  Relax-and-lift: 3
+
+Explored 1 nodes (62296 simplex iterations) in 9.39 seconds
+Thread count was 1 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%

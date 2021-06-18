@@ -1,0 +1,98 @@
+Solving problem for: 
+40 vehicles
+18 consumers
+6 producers
+1 depots
+0 other nodes
+12 timesteps with delta = 0.25 h
+objective: 1
+C init: 1.0
+P init: 0.0
+V init: 0.1
+
+Gurobi 9.1.1 (linux64) logging started Tue May 11 14:46:47 2021
+
+Changed value of parameter LogFile to output/18c_06p_012t_17of40v_log.txt
+   Prev:   Default: 
+Parameter LogToConsole unchanged
+   Value: 1  Min: 0  Max: 1  Default: 1
+Changed value of parameter threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Parameter method unchanged
+   Value: -1  Min: -1  Max: 5  Default: -1
+Parameter MIPFocus unchanged
+   Value: 0  Min: 0  Max: 3  Default: 0
+Parameter MIPGap unchanged
+   Value: 0.0001  Min: 0.0  Max: inf  Default: 0.0001
+Parameter CutPasses unchanged
+   Value: -1  Min: -1  Max: 2000000000  Default: -1
+Changed value of parameter OptimalityTol to 0.001
+   Prev: 1e-06  Min: 1e-09  Max: 0.01  Default: 1e-06
+Changed value of parameter FeasibilityTol to 0.001
+   Prev: 1e-06  Min: 1e-09  Max: 0.01  Default: 1e-06
+Changed value of parameter IntFeasTol to 0.001
+   Prev: 1e-05  Min: 1e-09  Max: 0.1  Default: 1e-05
+Changed value of parameter TimeLimit to 86400.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.1 build v9.1.1rc0 (linux64)
+Thread count: 16 physical cores, 16 logical processors, using up to 1 threads
+Optimize a model with 22529 rows, 262486 columns and 1287944 nonzeros
+Model fingerprint: 0xf967a257
+Variable types: 10446 continuous, 252040 integer (252040 binary)
+Coefficient statistics:
+  Matrix range     [1e-02, 5e+01]
+  Objective range  [1e-06, 2e+02]
+  Bounds range     [1e+00, 5e+02]
+  RHS range        [2e-01, 3e+01]
+
+Loaded user MIP start with objective 1901.16
+
+Presolve removed 408 rows and 184 columns
+Presolve time: 2.51s
+Presolved: 22121 rows, 262302 columns, 1229443 nonzeros
+Variable types: 10302 continuous, 252000 integer (251960 binary)
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+    5381    2.3874354e+02   2.095764e+00   1.693551e+10      5s
+   17431    2.0591088e+02   0.000000e+00   4.387628e+03     10s
+   26713    2.0554778e+02   0.000000e+00   1.343744e+04     15s
+   36769    2.0541342e+02   0.000000e+00   1.712581e+02     20s
+   43523    2.0538593e+02   0.000000e+00   2.798797e+01     25s
+   45513    2.0536538e+02   0.000000e+00   3.134965e+00     30s
+   47972    2.0547060e+02   0.000000e+00   5.233418e+00     35s
+   49009    2.0547126e+02   0.000000e+00   0.000000e+00     37s
+
+Root relaxation: objective 2.054713e+02, 49009 iterations, 33.68 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  205.47126    0 1104 1901.15761  205.47126  89.2%     -   37s
+     0     0  205.48886    0 1417 1901.15761  205.48886  89.2%     -   84s
+     0     0  205.49728    0 1547 1901.15761  205.49728  89.2%     -  202s
+     0     0  205.54165    0 1766 1901.15761  205.54165  89.2%     - 1428s
+     0     0  205.54410    0 1711 1901.15761  205.54410  89.2%     - 1519s
+     0     0  205.57463    0 1821 1901.15761  205.57463  89.2%     - 1685s
+     0     0          -    0      1901.15761  205.57463  89.2%     - 86400s
+
+Cutting planes:
+  Implied bound: 595
+  MIR: 170
+  Flow cover: 225
+  Relax-and-lift: 76
+
+Explored 1 nodes (8824718 simplex iterations) in 86400.02 seconds
+Thread count was 1 (of 16 available processors)
+
+Solution count 1: 1901.16 
+
+Time limit reached
+Best objective 1.901157614666e+03, best bound 2.055746260453e+02, gap 89.1869%
+
+Solution quality statistics for model smart_krit :
+  Maximum violation:
+    Bound       : 0.00000000e+00
+    Constraint  : 6.25000000e-05 (R11487)
+    Integrality : 0.00000000e+00

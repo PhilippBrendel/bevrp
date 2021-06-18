@@ -17,7 +17,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir):
     if not os.path.exists('output'):
         os.mkdir('output')
     logger = setup_logger('logger',
-                            os.path.join('output', out_dir, "my_log.log"),
+                            os.path.join('output', 'paper', out_dir, "my_log.log"),
                             formatter=['%(asctime)s:%(message)s',
                                         '%H:%M:%S'])
 
