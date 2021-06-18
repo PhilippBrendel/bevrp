@@ -21,6 +21,9 @@ def main(configs, time_limit_total, time_limit_b, out_dir):
                             formatter=['%(asctime)s:%(message)s',
                                         '%H:%M:%S'])
 
+    logger.info(f'Total time limit per instance: {time_limit_total}')
+    logger.info(f'Time Limit for finding feasible solutions: {time_limit_b}')
+
     for config in configs:
         with open(config) as config_file:
             yaml_dict = yaml.load(config_file,
