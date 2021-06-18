@@ -14,10 +14,10 @@ import argparse
 
 def main(configs, time_limit_total, time_limit_b, out_dir):
     # Set up logging
-    if not os.path.exists('output'):
-        os.mkdir('output')
-    logger = setup_logger('logger',
-                            os.path.join('output', 'paper', out_dir, "my_log.log"),
+    out_dir = os.path.join('output', 'paper', out_dir, "my_log.log")
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+    logger = setup_logger('logger', out_dir,
                             formatter=['%(asctime)s:%(message)s',
                                         '%H:%M:%S'])
 
