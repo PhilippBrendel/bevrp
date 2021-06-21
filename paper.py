@@ -54,12 +54,12 @@ def main(configs, time_limit_total, time_limit_b, out_dir):
                 else:
                     logger.info('Infeasible')
 
-            logger.info(f'Finished part B: Best Limit: {v_limit} in file {best_res}')
+            logger.info(f'Finished part B: Best Limit: {best_limit} in file {best_res}')
 
             # Part C: warm-start with remaining time
             yaml_dict['constrain_vehicles'] = best_limit
             yaml_dict['objective'] = 1
-            time_passed = time.time - start_time
+            time_passed = time.time() - start_time
             time_left = time_limit_total - time_passed
             yaml_dict['TimeLimit'] = time_left
             logger.info(f'Using remaining {time_left} s with warm_start')
