@@ -8,13 +8,14 @@ import argparse
 
 
 class my_sk():
-    def __init__(self, config):
+    def __init__(self, config, out_dir='output'):
         '''
         config: path to YAML or yaml_dict
         '''
         # create output folder and read config
-        if not os.path.exists('output'):
-            os.makedirs('output')
+        self.out_dir = out_dir
+        if not os.path.exists(self.out_dir):
+            os.makedirs(self.out_dir)
         self.time_str = datetime.now().strftime("%m_%d-%H_%M_%S")
         
         if isinstance(config, str):
@@ -91,10 +92,10 @@ class my_sk():
             inter_str,
             len(self.vehicles)
         )
-        if os.path.exists(os.path.join('output', 
+        if os.path.exists(os.path.join(self.out_dir, 
                                        self.instance_str + '_log.txt')):
             self.instance_str += ('_' + self.time_str)
-        self.LogFile = os.path.join('output', 
+        self.LogFile = os.path.join(self.out_dir, 
                                     self.instance_str + '_log.txt')
 
         self.mod = Model("smart_krit")
@@ -544,7 +545,7 @@ class my_sk():
             exit()
 
         # save, plot, etc.
-        filepath = os.path.join('output', self.instance_str + '.txt')
+        filepath = os.path.join(self.out_dir, self.instance_str + '.txt')
 
         varlist = mod.getVars()
         with open(filepath, 'w') as out_file:
@@ -571,7 +572,7 @@ class my_sk():
                        'P_vn': self.P_vn,
                        'E_nt': self.E_nt,
                         }
-        pickle_path = os.path.join('output', self.instance_str + '.p')
+        pickle_path = os.path.join(self.out_dir, self.instance_str + '.p')
         with open(pickle_path, 'wb') as p_path:
             pickle.dump(model_dict, p_path)
 

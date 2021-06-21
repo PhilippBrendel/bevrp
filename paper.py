@@ -41,13 +41,13 @@ def main(configs, time_limit_total, time_limit_b, out_dir):
             for v_limit in [40, 30, 20, 15, 10, 5, 4, 3, 2, 1]:
                 logger.info(f'Limit: {v_limit}')
                 yaml_dict['constrain_vehicles'] = v_limit
-                sk = my_sk(yaml_dict)
+                sk = my_sk(yaml_dict, out_dir=out_dir)
                 sk.preprocess()
                 grb_mod = sk.solve()
-                sk.postprocess(grb_mod)
 
                 # Check feasibility
                 if grb_mod.status == 2:
+                    sk.postprocess(grb_mod)
                     best_limit = v_limit
                     best_res = sk.instance_str + '.txt'
                     logger.info('Feasible')
@@ -68,7 +68,8 @@ def main(configs, time_limit_total, time_limit_b, out_dir):
             w, s_n, s_v, f, z, e = read_results(os.path.join('output', best_res))
             grb_mod = sk.solve(w_start=w, s_n_start=s_n, s_v_start=s_v,
                             f_start=f, z_start=z, e_start=e)
-            sk.postprocess(grb_mod)
+            if grb_mod.status == 2:
+                sk.postprocess(grb_mod)
 
 
 if __name__ == '__main__':
@@ -78,7 +79,7 @@ if __name__ == '__main__':
                         dest='config', default='configs', 
                         help='Config file to be used')
     parser.add_argument('-o', '--output',
-                        dest='output', default='paper', 
+                        dest='output', default='out', 
                         help='Output (sub-)directory to be used')
     parser.add_argument('-t', '--timelimit', type=int,
                         dest='timelimit', default=86400, 
