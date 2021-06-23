@@ -31,6 +31,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir):
         logger.info(f'Config file: {config}')
 
         for t in [2.0, 3.0, 4.0, 5.0, 10.0]:
+            logger.info(f'Considered time window: {t} h')
             start_time = time.time()
             # Part B: objective 0
             yaml_dict['objective'] = 0
@@ -39,7 +40,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir):
             best_limit = None
             best_res = None
             for v_limit in [40, 30, 20, 15, 10, 5, 4, 3, 2, 1]:
-                logger.info(f'Limit: {v_limit}')
+                logger.info(f'Vehicle Limit: {v_limit}')
                 yaml_dict['constrain_vehicles'] = v_limit
                 sk = my_sk(yaml_dict, out_dir=out_dir)
                 sk.preprocess()
@@ -49,27 +50,35 @@ def main(configs, time_limit_total, time_limit_b, out_dir):
                 if grb_mod.status == 2:
                     sk.postprocess(grb_mod)
                     best_limit = v_limit
-                    best_res = sk.instance_str + '.txt'
-                    logger.info('Feasible')
+                    best_res = os.path.join(out_dir, (sk.instance_str + '.txt'))
+                    logger.info(f'Feasible after {grb_mod.runtime} s')
+                elif grb_mod.status == 3:
+                    logger.info(f'Infeasible  after {grb_mod.runtime} s')
+                elif grb_mod.status == 9:
+                    logger.info(f'Not feasible after time limit: {grb_mod.runtime}')
                 else:
-                    logger.info('Infeasible')
+                    logger.info(f'grb_mod stats returned: {grb_mod.status}')
 
             logger.info(f'Finished part B: Best Limit: {best_limit} in file {best_res}')
 
             # Part C: warm-start with remaining time
-            yaml_dict['constrain_vehicles'] = best_limit
-            yaml_dict['objective'] = 1
-            time_passed = time.time() - start_time
-            time_left = time_limit_total - time_passed
-            yaml_dict['TimeLimit'] = time_left
-            logger.info(f'Using remaining {time_left} s with warm_start')
-            sk = my_sk(yaml_dict)
-            sk.preprocess()
-            w, s_n, s_v, f, z, e = read_results(os.path.join('output', best_res))
-            grb_mod = sk.solve(w_start=w, s_n_start=s_n, s_v_start=s_v,
-                            f_start=f, z_start=z, e_start=e)
-            if grb_mod.status == 2:
-                sk.postprocess(grb_mod)
+            if best_res is None:
+                logger.info('Could not find feasible solution, skipping warm-start...')
+            else:
+                yaml_dict['constrain_vehicles'] = best_limit
+                yaml_dict['objective'] = 1
+                time_passed = time.time() - start_time
+                time_left = time_limit_total - time_passed
+                yaml_dict['TimeLimit'] = time_left
+                logger.info(f'Using remaining {time_left} s with warm_start')
+                sk = my_sk(yaml_dict, out_dir=out_dir)
+                sk.preprocess()
+                w, s_n, s_v, f, z, e = read_results(best_res)
+                grb_mod = sk.solve(w_start=w, s_n_start=s_n, s_v_start=s_v,
+                                f_start=f, z_start=z, e_start=e)
+                if hasattr(grb_mod, 'objVal'):
+                    sk.postprocess(grb_mod)
+                    logger.info(f'Final objective {grb_mod.objVal}')
 
 
 if __name__ == '__main__':
