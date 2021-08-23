@@ -173,7 +173,7 @@ if __name__ == '__main__':
         configs = [args.config]
 
 
-    time_limit_b = 60
+    time_limit_b = 1800
     time_limit_total = args.timelimit
 
     main(configs, time_limit_total, time_limit_b, args.output, args.approach)
