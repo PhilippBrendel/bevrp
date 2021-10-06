@@ -12,7 +12,7 @@ from smart_krit import my_sk
 import argparse
 
 
-def main(configs, time_limit_total, time_limit_b, out_dir, approach):
+def main(configs, time_limit_total, time_limit_b, out_dir, approach, time_windows):
     '''
     Part B: (A is direct solution of full model)
     Solve for feasibility within *time_limit_b*
@@ -35,15 +35,17 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
     logger.info(f'Total time limit per instance: {time_limit_total}')
     logger.info(f'Time Limit for finding feasible solutions: {time_limit_b}')
 
+    res_frame = pd.DataFrame()
+
     for config in configs:
         with open(config) as config_file:
             yaml_dict = yaml.load(config_file,
                                 Loader=yaml.FullLoader)
         logger.info(f'Config file: {config}')
-
-        res_frame = pd.DataFrame()
+        config_name = os.path.splitext(os.path.basename(config))[0]
+        tmp_out = os.path.join(out_dir, config_name)
         
-        for t in [2.0, 3.0, 4.0, 5.0, 10.0]:
+        for t in time_windows:
             logger.info(f'Considered time window: {t} h')
             start_time = time.time()
             # Part B: objective 0
@@ -56,7 +58,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                 for v_limit in [40, 30, 20, 15, 10, 5, 4, 3, 2, 1]:
                     logger.info(f'Vehicle Limit: {v_limit}')
                     yaml_dict['constrain_vehicles'] = v_limit
-                    sk = my_sk(yaml_dict, out_dir=out_dir)
+                    sk = my_sk(yaml_dict, out_dir=tmp_out)
                     sk.preprocess()
                     grb_mod = sk.solve()
 
@@ -64,7 +66,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                     if grb_mod.status == 2:
                         sk.postprocess(grb_mod)
                         best_limit = v_limit
-                        best_res = os.path.join(out_dir, (sk.instance_str + '.txt'))
+                        best_res = os.path.join(tmp_out, (sk.instance_str + '.txt'))
                         logger.info(f'Feasible after {grb_mod.runtime} s')
                         status = 'FEASIBLE'
                     elif grb_mod.status == 3:
@@ -76,7 +78,8 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                     else:
                         logger.info(f'grb_mod status returned: {grb_mod.status}')
                         status = grb_mod.status
-                    res_frame = res_frame.append({'t': t,
+                    res_frame = res_frame.append({'config': config_name,
+                                                  't': t,
                                                   'v_limit': v_limit,
                                                   'status': status,
                                                   'runtime': grb_mod.runtime}, ignore_index=True)
@@ -87,7 +90,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                 while v_limit < ub and v_limit > lb:
                     logger.info(f'Vehicle Limit: {v_limit}')
                     yaml_dict['constrain_vehicles'] = v_limit
-                    sk = my_sk(yaml_dict, out_dir=out_dir)
+                    sk = my_sk(yaml_dict, out_dir=tmp_out)
                     sk.preprocess()
                     grb_mod = sk.solve()
 
@@ -95,7 +98,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                     if grb_mod.status == 2:
                         sk.postprocess(grb_mod)
                         best_limit = v_limit
-                        best_res = os.path.join(out_dir, (sk.instance_str + '.txt'))
+                        best_res = os.path.join(tmp_out, (sk.instance_str + '.txt'))
                         logger.info(f'Feasible after {grb_mod.runtime} s')
                         ub = v_limit
                         status = 'FEASIBLE'
@@ -110,10 +113,11 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                         else:
                             logger.info(f'grb_mod status returned: {grb_mod.status}')
                             status = grb_mod.status
-                    res_frame = res_frame.append({'t': t,
-                                      'v_limit': v_limit,
-                                      'status': status,
-                                      'runtime': grb_mod.runtime}, ignore_index=True)
+                    res_frame = res_frame.append({'config': config_name,
+                                                  't': t,
+                                                  'v_limit': v_limit,
+                                                  'status': status,
+                                                  'runtime': grb_mod.runtime}, ignore_index=True)
                     v_limit = int(lb+(ub-lb)/2)
 
             res_frame.to_csv(os.path.join(out_dir, 'tmp_results_b.csv'))
@@ -129,7 +133,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                 time_left = time_limit_total - time_passed
                 yaml_dict['TimeLimit'] = time_left
                 logger.info(f'Using remaining {time_left} s with warm_start')
-                sk = my_sk(yaml_dict, out_dir=out_dir)
+                sk = my_sk(yaml_dict, out_dir=tmp_out)
                 sk.preprocess()
                 w, s_n, s_v, f, z, e = read_results(best_res)
                 grb_mod = sk.solve(w_start=w, s_n_start=s_n, s_v_start=s_v,
@@ -140,7 +144,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                 else:
                     logger.info('No Objective value -> failed warmstart?')
 
-        res_frame.to_csv(os.path.join(out_dir, 'results_b.csv'))
+    res_frame.to_csv(os.path.join(out_dir, 'results_b.csv'))
 
 
 def main_naive(configs, time_limit, out_dir, time_windows):
@@ -162,15 +166,17 @@ def main_naive(configs, time_limit, out_dir, time_windows):
         with open(config) as config_file:
             yaml_dict = yaml.load(config_file,
                                   Loader=yaml.FullLoader)
+        config_name = os.path.splitext(os.path.basename(config))[0]
+        tmp_out = os.path.join(out_dir, config_name)
 
-        for t in [2.0, 3.0, 4.0, 5.0, 10.0]:
+        for t in time_windows:
             logger.info(f'Considered time window: {t} h')
             yaml_dict['objective'] = 1
             yaml_dict['TimeLimit'] = time_limit
-        
+            yaml_dict['T'] = t
 
             logger.info(f'Using {time_limit} s for naive optimization')
-            sk = my_sk(yaml_dict, out_dir=out_dir)
+            sk = my_sk(yaml_dict, out_dir=tmp_out)
             sk.preprocess()
             grb_mod = sk.solve()
             if grb_mod.status == 2:
@@ -185,11 +191,14 @@ def main_naive(configs, time_limit, out_dir, time_windows):
                 status = 'TIMEOUT'
                 logger.info(f'Timeout after {grb_mod.runtime} s')
 
-            res_frame = res_frame.append({'config': config,
+            res_frame = res_frame.append({'config': config_name,
                                           't': t,
                                           'status': status,
                                           'runtime': grb_mod.runtime},
                                          ignore_index=True)
+            res_frame.to_csv(os.path.join(out_dir, 'tmp_results.csv'))
+
+    res_frame.to_csv(os.path.join(out_dir, 'results.csv'))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -225,11 +234,11 @@ if __name__ == '__main__':
         # use config
         configs = [args.config]
 
-    time_windows = [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+    time_windows = [2.0, 3.0]#, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     time_limit_b = 1800
     time_limit_total = args.timelimit
 
     if args.approach == 'naive':
         main_naive(configs, time_limit_total, args.output, time_windows)
     else:
-        main(configs, time_limit_total, time_limit_b, args.output, args.approach)
+        main(configs, time_limit_total, time_limit_b, args.output, args.approach, time_windows)
