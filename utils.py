@@ -156,17 +156,23 @@ def get_vehicle_data(yaml_dict):
 
     Args:
         yaml_dict (dict): dictionary from the config file, 
-                          containing directory of vehicle files 
+                          containing source for vehicle files 
     Returns:
         v_data (pd.DataFrame): Dataframe containing all data
     '''
     v_max = yaml_dict['v_max']
-    vehicle_dir = os.path.join(dir_path, 
+    vehicle_src = os.path.join(dir_path, 
                                yaml_dict['vehicle_dir'])
     cols = ['ID','cap[kWh]','cap_0[kWh]','node_0',
             'consumption[kWh/km]','power_cdc[kW]',
             'speed[km/h]','name','costs']
-    vehicle_files = glob.glob(os.path.join(vehicle_dir,'*.CSV'))
+    if os.path.isdir(vehicle_src):
+        vehicle_files = glob.glob(os.path.join(vehicle_src,'*.CSV'))
+    elif os.path.isfile(vehicle_src) and vehicle_src.endswith('.csv'):
+        vehicle_files = [vehicle_src]
+    else:
+        exit(f'Could not interpet vehicle source {vehicle_src}!')
+
     vehicle_data = pd.DataFrame(columns=cols)
     for i in range(len(vehicle_files)):
         frame = pd.read_csv(vehicle_files[i])
