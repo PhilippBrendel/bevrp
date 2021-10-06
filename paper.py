@@ -200,6 +200,7 @@ def main_naive(configs, time_limit, out_dir, time_windows):
 
     res_frame.to_csv(os.path.join(out_dir, 'results.csv'))
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
                         description='Visualize a specific file.')
@@ -207,7 +208,6 @@ if __name__ == '__main__':
     required.add_argument('-a', '--approach', type=str,
                         dest='approach',
                         help='Algorithmic approach', required=True)
-
     parser.add_argument('-c', '--config',
                         dest='config', default='configs', 
                         help='Config file(s) to be used')
@@ -234,7 +234,7 @@ if __name__ == '__main__':
         # use config
         configs = [args.config]
 
-    time_windows = [2.0, 3.0]#, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+    time_windows = [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     time_limit_b = 1800
     time_limit_total = args.timelimit
 

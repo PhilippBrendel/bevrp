@@ -1,6 +1,0 @@
-ID,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
-Krankenhaus 2,135,89.55,89.55,profile_G3.CSV,50,50,49.441804,7.772308
-Feuerwehr 1,13,8.36,8.36,profile_G3.CSV,50,50,49.439019,7.742563
-Polizei 1,13,8.02,8.02,profile_G3.CSV,50,50,49.447667,7.700427
-Stadtverwaltung,55,10.63,10.63,profile_G1.CSV,50,10,49.446586,7.767529
-Rundfunk 1,75,13.70,13.70,profile_G1.CSV,50,10,49.451644,7.768351

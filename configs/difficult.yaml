@@ -14,7 +14,7 @@ vehicle_init: 0.1               # initial soc of vehicles
 ##################
 vehicle_dir: 'data/paper/v_KL_city.csv'
 depot_dir: 'data/depots'
-consumer_dir: 'data/paper/c_extreme.csv'
+consumer_dir: 'data/paper/c_difficult.csv'
 producer_dir: 'data/paper/p_all.csv'
 other_dir: 'data/others'
 
