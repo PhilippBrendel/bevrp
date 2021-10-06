@@ -116,7 +116,6 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                                       'runtime': grb_mod.runtime}, ignore_index=True)
                     v_limit = int(lb+(ub-lb)/2)
 
-
             res_frame.to_csv(os.path.join(out_dir, 'tmp_results_b.csv'))
             logger.info(f'Finished part B: Best Limit: {best_limit} in file {best_res}')
 
@@ -138,24 +137,78 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach):
                 if hasattr(grb_mod, 'objVal'):
                     sk.postprocess(grb_mod)
                     logger.info(f'Final objective {grb_mod.objVal}')
+                else:
+                    logger.info('No Objective value -> failed warmstart?')
 
         res_frame.to_csv(os.path.join(out_dir, 'results_b.csv'))
+
+
+def main_naive(configs, time_limit, out_dir, time_windows):
+    '''
+    Naive solution of instances
+    '''
+    # Set up logging
+    out_dir = os.path.join('output', 'paper', out_dir)
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+    logger = setup_logger('logger', os.path.join(out_dir, 'my_log.log'),
+                            formatter=['%(asctime)s:%(message)s',
+                                        '%H:%M:%S'])
+
+    res_frame = pd.DataFrame()
+
+    for config in configs:
+        logger.info(f'Config file: {config}')
+        with open(config) as config_file:
+            yaml_dict = yaml.load(config_file,
+                                  Loader=yaml.FullLoader)
+
+        for t in [2.0, 3.0, 4.0, 5.0, 10.0]:
+            logger.info(f'Considered time window: {t} h')
+            yaml_dict['objective'] = 1
+            yaml_dict['TimeLimit'] = time_limit
+        
+
+            logger.info(f'Using {time_limit} s for naive optimization')
+            sk = my_sk(yaml_dict, out_dir=out_dir)
+            sk.preprocess()
+            grb_mod = sk.solve()
+            if grb_mod.status == 2:
+                status = 'FEASIBLE'
+                sk.postprocess(grb_mod)
+                logger.info(f'Feasible after {grb_mod.runtime} s')
+                logger.info(f'Final objective {grb_mod.objVal}')
+            elif grb_mod.status == 3:
+                status = 'INFEASIBLE'
+                logger.info(f'Infeasible  after {grb_mod.runtime} s')
+            elif grb_mod.status == 9:
+                status = 'TIMEOUT'
+                logger.info(f'Timeout after {grb_mod.runtime} s')
+
+            res_frame = res_frame.append({'config': config,
+                                          't': t,
+                                          'status': status,
+                                          'runtime': grb_mod.runtime},
+                                         ignore_index=True)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
                         description='Visualize a specific file.')
+    required = parser.add_argument_group('required named arguments')
+    required.add_argument('-a', '--approach', type=str,
+                        dest='approach',
+                        help='Algorithmic approach', required=True)
+
     parser.add_argument('-c', '--config',
                         dest='config', default='configs', 
-                        help='Config file to be used')
+                        help='Config file(s) to be used')
     parser.add_argument('-o', '--output',
                         dest='output', default='out', 
                         help='Output (sub-)directory to be used')
     parser.add_argument('-t', '--timelimit', type=int,
                         dest='timelimit', default=86400, 
                         help='TimeLimit')
-    parser.add_argument('-a', '--approach', type=str,
-                        dest='approach', default='bs',
-                        help='Algorithmic approach')
+
     args = parser.parse_args()
 
 
@@ -172,8 +225,11 @@ if __name__ == '__main__':
         # use config
         configs = [args.config]
 
-
+    time_windows = [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     time_limit_b = 1800
     time_limit_total = args.timelimit
 
-    main(configs, time_limit_total, time_limit_b, args.output, args.approach)
+    if args.approach == 'naive':
+        main_naive(configs, time_limit_total, args.output, time_windows)
+    else:
+        main(configs, time_limit_total, time_limit_b, args.output, args.approach)
