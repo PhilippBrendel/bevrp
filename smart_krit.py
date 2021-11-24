@@ -550,8 +550,9 @@ class my_sk():
         varlist = mod.getVars()
         with open(filepath, 'w') as out_file:
             for v in varlist:
-                out_file.write( '%s %g' % (v.varName, v.x) )
-                out_file.write('\n')
+                if hasattr(v, 'x'):
+                    out_file.write( '%s %g' % (v.varName, v.x) )
+                    out_file.write('\n')
 
         model_dict = {'times': self.times,
                        't_0': self.t_0,                

@@ -190,6 +190,8 @@ def main_naive(configs, time_limit, out_dir, time_windows):
             elif grb_mod.status == 9:
                 status = 'TIMEOUT'
                 logger.info(f'Timeout after {grb_mod.runtime} s')
+                if hasattr(grb_mod, 'objVal'):
+                    logger.info(f'Objective: {grb_mod.objVal}')
 
             res_frame = res_frame.append({'config': config_name,
                                           't': t,
