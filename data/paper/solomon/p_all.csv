@@ -1,0 +1,5 @@
+ID,cap[kWh],cap_0[kWh],peak[kW],profile,power_cdc[kW],n_charge,lat,lon
+P_sw,200.0,100.0,50,const.csv,100,20,49.56,10.98
+P_se,200.0,100.0,50,const.csv,100,20,49.56,11.03
+P_nw,200.0,100.0,50,const.csv,100,20,49.61,10.98
+P_ne,200.0,100.0,50,const.csv,100,20,49.61,11.03
