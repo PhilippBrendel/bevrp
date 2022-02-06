@@ -617,7 +617,11 @@ class visuals:
                         ax[v_ax].plot(array,'g-')
                 max_soc.append(np.max(array))
 
-            y_max = max(max_soc)
+            # catch value error if no vehicles used
+            try:
+                y_max = max(max_soc)
+            except ValueError:
+                y_max = 0
             ax[v_ax].set_xticks(np.arange(0, self.t_steps))
             ax[v_ax].set_xticklabels(self.x_tick_str)
             ax[v_ax].set_title('Energy transport - Vehicles', fontsize=15)
