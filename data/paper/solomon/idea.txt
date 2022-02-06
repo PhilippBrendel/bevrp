@@ -1,0 +1,94 @@
+Vehicles
+--------
+R1,C1,RC1 -> 200
+R2,C2,RC2 -> 1000
+
+start init: 6km diagonale ist max range -> 0.2 * 6 kWh -> 2kWh sollten easy reichen
+aber auch blöd wenn sie erst aufladen müssen
+
+time
+-----
+
+R1 -> 230 mins sind scheiße für Zeitdiskret. -> 4h aufrunden
+R2 -> 1000 mins -> 15h (evtl. runtergehen)
+
+C1 -> 1236
+C2 -> 3390
+
+RC1 -> 240 -> 4h
+RC2 -> 960
+
+
+Consumer a la solomon
+---------------------
+
+Coords mapped from some min/max ranges in x/y to lat/lon in erly
+
+
+R1: 
+100 costumers in 230 horizon -> need more vehicles 
+
+R2: 100 costumers in 1000 horizon -> need less vehicles
+
+only change is in ready time and due date
+vehicle capacity was increased for R1
+
+different ready times and different window lengths/demands
+
+
+for us: different times of energy out, different consumption = demands
+
+ich könnte die profiles so anpassen dass es genau dem VRPTW entspricht, aber wofür?
+
+a) use-case realistisch mit transmittern und so
+b) comp study on solomon instances -> einfache Profile machens einfacher
+
+Producer
+--------
+
+Schneider macht in E-VRPTW random recharging stations (no limit)
+
+-> 4 in den ecken SW, NW, NE, SE
+
+wie init?
+
+1.0 bei 200 cap sollte erst mal nicht das bottleneck sein (800 kWh ready)
+
+
+
+Depot
+------
+
+ist das Depot.
+
+
+
+
+Warum ist das Problem/Modell komplexer als EVPTW
+
+Routing-Variablen
+-----------------
+(warum x_ijvt statt x_ij)
+
+
+Schneider: 2-index formulierung x_ij -> danach anzahl routen feststellen etc. 
+(jeder Konsument nur einmal abgefahren!) 
+
+
+Multi-Visits:
+u.U. müssen consumer mehrfach bedient werden von versch. Fahrzeugen
+xij nicht mehr eindeutig -> x_ijv Pflicht
+
+
+Zeit-abhängige Erzeugung/Verbrauch:
+
+- wie soll man ohne Zeit-Diskretisierung variable/quasi-kontinuierliche Profile (Verbrauch/Erzeugung) abbilden?
+- in den anderen settings passiert nichts zeitabhängig!
+    - statt Zeit-variabler Erzeugung: Strom immer verfügbar an recharging stations
+    - statt Zeit-variablem Verbrauch: fixer Demand der in einem Window geliefert werden muss
+
+Welche Probleme macht er? 
+Lösungen unterliegen diskretisierungsfluch,
+delta-t ist minimum für ortswechsel und laden/entladen
+
+allgemein vier-indizes -> fucking viele variablen/Gleichungen

@@ -1,0 +1,52 @@
+wenn smart-krit auf obj 0 ganz okay läuft, sollte heuristik da auch passen
+
+
+fakt: wir brauchen viel mehr vehicles weil discharge zeit braucht
+solomon service time -> 10 mins
+bei uns 50 demand = 15 mins mindestens
+
+
+man könnte auch C1 (bzw. generell alle instanzen auf 4h skalieren)
+sollte nicer laufen
+
+
+lokal
+
+R1 - smart_krit - obj = 0
+-------------------------
+
+Consumer in [10,15] viel demand
+
+20 V:
+
+10 C -> 80s (16 used)
+15 C -> 229s (19 used)
+20 C -> 1654s (20 used)
+25 C ->
+
+30 V:
+10 C -> 95s (17 used)
+15 C -> 
+20 C -> 
+25 C ->
+
+40 V:
+10 C -> 177s (20 used)
+15 C -> 
+20 C -> 
+25 C ->
+
+
+C1
+---
+
+
+
+RC1
+----
+
+20 V:
+
+5 C -> 1s 
+10 C -> 27s
+15 C -> 
