@@ -33,7 +33,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach, time_window
                                         '%H:%M:%S'])
 
     logger.info(f'Total time limit per instance: {time_limit_total}')
-    logger.info(f'Time Limit for finding feasible solutions: {time_limit_b}')
+    logger.info(f'Time Limit for finding feasible solutions: {time_limit_b}\n')
 
     res_frame = pd.DataFrame()
 
@@ -41,7 +41,9 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach, time_window
         with open(config) as config_file:
             yaml_dict = yaml.load(config_file,
                                 Loader=yaml.FullLoader)
+        logger.info('')
         logger.info(f'Config file: {config}')
+        logger.info('--------------------------------')
         config_name = os.path.splitext(os.path.basename(config))[0]
         tmp_out = os.path.join(out_dir, config_name)
         
@@ -83,6 +85,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach, time_window
                                                   'v_limit': v_limit,
                                                   'status': status,
                                                   'runtime': grb_mod.runtime}, ignore_index=True)
+                    res_frame.to_csv(os.path.join(out_dir, 'tmp_results.csv'))
             elif approach == 'pb':
                 ub = 40
                 lb = 0
@@ -119,13 +122,14 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach, time_window
                                                   'status': status,
                                                   'runtime': grb_mod.runtime}, ignore_index=True)
                     v_limit = int(lb+(ub-lb)/2)
+                    res_frame.to_csv(os.path.join(out_dir, 'tmp_results.csv'))
 
-            res_frame.to_csv(os.path.join(out_dir, 'tmp_results_b.csv'))
+            res_frame.to_csv(os.path.join(out_dir, 'tmp_results.csv'))
             logger.info(f'Finished part B: Best Limit: {best_limit} in file {best_res}')
 
             # Part C: warm-start with remaining time
             if best_res is None:
-                logger.info('Could not find feasible solution, skipping warm-start...')
+                logger.info('Could not find feasible solution, skipping warm-start...\n')
             else:
                 yaml_dict['constrain_vehicles'] = best_limit
                 yaml_dict['objective'] = 1
@@ -140,11 +144,20 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach, time_window
                                 f_start=f, z_start=z, e_start=e)
                 if hasattr(grb_mod, 'objVal'):
                     sk.postprocess(grb_mod)
-                    logger.info(f'Final objective {grb_mod.objVal}')
+                    logger.info(f'Final objective {grb_mod.objVal}\n')
+                    obj_val = grb_mod.obj_val
                 else:
-                    logger.info('No Objective value -> failed warmstart?')
+                    logger.info('No Objective value -> failed warmstart?\n')
+                    obj_val = 'None'
+                res_frame = res_frame.append({'config': config_name + '_warmstart',
+                                                't': t,
+                                                'v_limit': best_limit,
+                                                'status': grb_mod.status,
+                                                'runtime': grb_mod.runtime,
+                                                'obj_val': obj_val}, ignore_index=True)
+                res_frame.to_csv(os.path.join(out_dir, 'tmp_results.csv'))
 
-    res_frame.to_csv(os.path.join(out_dir, 'results_b.csv'))
+    res_frame.to_csv(os.path.join(out_dir, 'results.csv'))
 
 
 def main_naive(configs, time_limit, out_dir, time_windows):
@@ -184,20 +197,26 @@ def main_naive(configs, time_limit, out_dir, time_windows):
                 sk.postprocess(grb_mod)
                 logger.info(f'Feasible after {grb_mod.runtime} s')
                 logger.info(f'Final objective {grb_mod.objVal}')
+                obj_val = grb_mod.objVal
             elif grb_mod.status == 3:
                 status = 'INFEASIBLE'
                 logger.info(f'Infeasible  after {grb_mod.runtime} s')
+                obj_val = 'None'
             elif grb_mod.status == 9:
                 status = 'TIMEOUT'
                 logger.info(f'Timeout after {grb_mod.runtime} s')
                 if hasattr(grb_mod, 'objVal'):
                     logger.info(f'Objective: {grb_mod.objVal}')
+                    obj_val = grb_mod.objVal
+                else:
+                    obj_val = None
 
             res_frame = res_frame.append({'config': config_name,
                                           't': t,
                                           'status': status,
-                                          'runtime': grb_mod.runtime},
-                                         ignore_index=True)
+                                          'runtime': grb_mod.runtime,
+                                          'obj_val': obj_val},
+                                          ignore_index=True)
             res_frame.to_csv(os.path.join(out_dir, 'tmp_results.csv'))
 
     res_frame.to_csv(os.path.join(out_dir, 'results.csv'))
@@ -226,9 +245,9 @@ if __name__ == '__main__':
     if os.path.isdir(args.config):
         # read all yamls from dir
         if platform in ['linux','linux2']:
-            configs = glob.glob(os.path.join('configs', '*.YAML')) +  glob.glob(os.path.join('configs', '*.yaml'))
+            configs = glob.glob(os.path.join(args.config, '*.YAML')) +  glob.glob(os.path.join(args.config, '*.yaml'))
         elif platform == 'win32':
-            configs = glob.glob(os.path.join('configs', '*.YAML'))
+            configs = glob.glob(os.path.join(args.config, '*.YAML'))
         else:
             print('Unknown platform!')
             exit()
@@ -236,7 +255,7 @@ if __name__ == '__main__':
         # use config
         configs = [args.config]
 
-    time_windows = [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+    time_windows = [4.0] # 2.0, 3.0 , 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     time_limit_b = 1800
     time_limit_total = args.timelimit
 
