@@ -23,7 +23,7 @@ other_dir: 'data/others'
 # Data restrictions #
 #####################
 v_max: 40
-c_max: 2
+c_max: 25
 p_max: 4
 o_max: 0
 d_max: 1
