@@ -1,0 +1,72 @@
+####################
+# initial settings #
+####################
+t_0: '10:30'                    # initial clock time
+T: 4                          # [h]
+delta_t: 0.25                   # [h]
+c_init: 1.0                     # initial soc of nodes 
+p_init: 1.0                     # initial soc of producers
+vehicle_init: 0.1               # initial soc of vehicles 
+
+
+##################
+# Data locations #
+##################
+vehicle_dir: 'data/paper/solomon/v1_uniform.csv'
+depot_dir: 'data/paper/solomon/rc1/d_rc1.csv'
+consumer_dir: 'data/paper/solomon/rc1/c_rc101.csv'
+producer_dir: 'data/paper/solomon/p_all.csv'
+other_dir: 'data/others'
+
+
+#####################
+# Data restrictions #
+#####################
+v_max: 40
+c_max: 25
+p_max: 4
+o_max: 0
+d_max: 1
+lat: [49.00, 49.90]     # min and max vals
+lon: [7.50, 11.50]
+
+
+##################
+# Model settings #
+##################
+objective: 0
+constr_j: True          # (1j) valid inequality
+min_vehicles: True      # toggle obj and constraints connected to z
+limit_vehicles: False    # (1l) limit charging vehicles at locations
+visualize: False         # visualize solution
+constrain_vehicles: # only allow leq this many vehicles being used 
+
+######################
+# Heuristic settings #
+######################
+h_init_time_limit: 120
+h_time_limit: 60
+h_init: quick           # [quick, greedy]
+
+
+###################
+# Gurobi settings #
+###################
+TimeLimit: 1800
+threads: 1
+# multiple threads for parallel work
+# can be restricted in order to save RAM
+method: -1
+# method used to solve root relaxation (only root!)
+# -1: default 1: dual-simplex 2: barrier 
+MIPFocus: 0
+# 0: default, balance between both
+# 1: focus on finding feasible solutions 
+# 2: more attention on proving optimality
+# 3: if best bound is barely moving 
+MIPGap: 0.0001    
+# default: 0.0001
+CutPasses: -1
+# default: -1
+write_lp: False
+LogToConsole: True
