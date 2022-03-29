@@ -2,7 +2,7 @@
 # initial settings #
 ####################
 t_0: '10:30'                    # initial clock time
-T: 4                          # [h]
+T: 21                          # [h]
 delta_t: 0.25                   # [h]
 c_init: 1.0                     # initial soc of nodes 
 p_init: 1.0                     # initial soc of producers
@@ -13,8 +13,8 @@ vehicle_init: 0.1               # initial soc of vehicles
 # Data locations #
 ##################
 vehicle_dir: 'data/paper/solomon/v1_uniform.csv'
-depot_dir: 'data/paper/solomon/c1/d_c101.csv'
-consumer_dir: 'data/paper/solomon/c1/c_c101.csv'
+depot_dir: 'data/paper/solomon/c1/d_c1.csv'
+consumer_dir: 'data/paper/solomon/c1/c_c104.csv'
 producer_dir: 'data/paper/solomon/p_all.csv'
 other_dir: 'data/others'
 
@@ -22,7 +22,7 @@ other_dir: 'data/others'
 #####################
 # Data restrictions #
 #####################
-v_max: 20
+v_max: 10
 c_max: 10
 p_max: 4
 o_max: 0
@@ -38,7 +38,7 @@ objective: 0
 constr_j: True          # (1j) valid inequality
 min_vehicles: True      # toggle obj and constraints connected to z
 limit_vehicles: False    # (1l) limit charging vehicles at locations
-visualize: True         # visualize solution
+visualize: False         # visualize solution
 constrain_vehicles: # only allow leq this many vehicles being used 
 
 ######################
