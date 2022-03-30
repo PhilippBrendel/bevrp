@@ -87,7 +87,7 @@ def main(configs, time_limit_total, time_limit_b, out_dir, approach, time_window
                                                   'runtime': grb_mod.runtime}, ignore_index=True)
                     res_frame.to_csv(os.path.join(out_dir, 'tmp_results.csv'))
             elif approach == 'pb':
-                ub = 40
+                ub = yaml_dict['v_max']
                 lb = 0
                 v_limit = int(lb+(ub-lb)/2)
                 while v_limit < ub and v_limit > lb:
