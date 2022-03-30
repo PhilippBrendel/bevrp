@@ -219,7 +219,7 @@ Project Link: [https://github.com/PhilippBrendel/bevrp](https://github.com/Phili
 [stars-url]: https://github.com/philippbrendel/bevrp/stargazers
 [issues-shield]: https://img.shields.io/github/issues/philippbrendel/bevrp.svg?style=flat-square
 [issues-url]: https://github.com/philippbrendel/bevrp/issues
-[license-shield]: https://img.shields.io/github/license/philippbrendel/bevrp.svg?style=flat-square
+[license-shield]: https://img.shields.io/bower/l/bootstrap?style=flat-square
 [license-url]: https://github.com/PhilippBrendel/bevrp/blob/main/LICENSE.md
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/philipp-brendel-9059171a6/
