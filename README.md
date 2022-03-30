@@ -173,8 +173,7 @@ See the [open issues](https://github.com/PhilippBrendel/bevrp/issues) for a list
 
 <!-- CONTRIBUTING -->
 ## Contributing
-TODO
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -187,14 +186,14 @@ Contributions are what make the open source community such an amazing place to b
 <!-- LICENSE -->
 ## License
 
-TODO. See `LICENSE` for more information.
+[MIT License](https://github.com/PhilippBrendel/bevrp/blob/main/LICENSE.md)
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Philipp Brendel - philipp.brendel@iisb.fraunhofer.de - philipp.brendel@fau.de
+Philipp Brendel - philipp.brendel@iisb.fraunhofer.de
 
 Project Link: [https://github.com/PhilippBrendel/bevrp](https://github.com/PhilippBrendel/bevrp)
 
