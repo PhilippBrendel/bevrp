@@ -238,6 +238,9 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--timelimit', type=int,
                         dest='timelimit', default=86400, 
                         help='TimeLimit')
+    parser.add_argument('-tw', '--timewindow', type=int,
+                        dest='timewindow', default=5, 
+                        help='Time Window of Simulation (hours)')
 
     args = parser.parse_args()
 
@@ -255,7 +258,8 @@ if __name__ == '__main__':
         # use config
         configs = [args.config]
 
-    time_windows = [4.0] # 2.0, 3.0 , 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+     # 2.0, 3.0 , 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+    time_windows = [args.timewindow]
     time_limit_b = 1800
     time_limit_total = args.timelimit
 
